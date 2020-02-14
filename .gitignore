@@ -1,0 +1,8 @@
+# Ignore build-generated files
+bin/
+lib/
+build/
+
+# Ignore log files in mission directory
+missions/*.log
+missions/*.alog
