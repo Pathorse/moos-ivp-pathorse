@@ -31,7 +31,7 @@ class PrimeFactor : public CMOOSApp
  private: // Configuration variables
 
  private: // State variables
-
+    list<int> received_numbers;
 };
 
 #endif 

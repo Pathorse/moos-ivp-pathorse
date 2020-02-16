@@ -17,6 +17,7 @@ using namespace std;
 PrimeFactor::PrimeFactor()
 {
 
+  received_numbers = {};
 }
 
 //---------------------------------------------------------
@@ -31,6 +32,7 @@ PrimeFactor::~PrimeFactor()
 
 bool PrimeFactor::OnNewMail(MOOSMSG_LIST &NewMail)
 {
+
   MOOSMSG_LIST::iterator p;
    
   for(p=NewMail.begin(); p!=NewMail.end(); p++) {
@@ -47,16 +49,9 @@ bool PrimeFactor::OnNewMail(MOOSMSG_LIST &NewMail)
     bool   mstr  = msg.IsString();
 #endif
 
-    string key   = msg.GetKey();
     int dval     = msg.GetDouble();
+    received_numbers.push_back(dval); // Push received numbers to list
 
-    if (key == "NUM_VALUE")
-    {
-      if (dval%2==0)
-        Notify("NUM_RESULT", to_string(dval) + ", even");
-      else
-        Notify("NUM_RESULT", to_string(dval) + ", odd");
-    }
   }
    return(true);
 }
@@ -76,6 +71,16 @@ bool PrimeFactor::OnConnectToServer()
 
 bool PrimeFactor::Iterate()
 {
+  list<int>::iterator p;
+  for (p=received_numbers.begin(); p!=received_numbers.end(); ++p){
+    int num = *p;
+    if (num%2==0)
+      Notify("NUM_RESULT", to_string(num) + ", even");
+    else
+      Notify("NUM_RESULT", to_string(num) + ", odd");
+    p = received_numbers.erase(p);
+  }
+
   return(true);
 }
 
@@ -102,7 +107,7 @@ bool PrimeFactor::OnStartUp()
       }
     }
   }
-  
+
   RegisterVariables();	
   return(true);
 }
