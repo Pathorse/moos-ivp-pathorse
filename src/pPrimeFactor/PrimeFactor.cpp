@@ -8,6 +8,8 @@
 #include <iterator>
 #include "MBUtils.h"
 #include "PrimeFactor.h"
+#include "PrimeEntry.h"
+#include <cstdint>
 
 using namespace std;
 
@@ -16,8 +18,9 @@ using namespace std;
 
 PrimeFactor::PrimeFactor()
 {
-
-  received_numbers = {};
+  m_total_num_received    = 0;
+  m_total_num_calculated  = 0;
+  m_received_numbers    = {};
 }
 
 //---------------------------------------------------------
@@ -25,6 +28,7 @@ PrimeFactor::PrimeFactor()
 
 PrimeFactor::~PrimeFactor()
 {
+
 }
 
 //---------------------------------------------------------
@@ -49,9 +53,21 @@ bool PrimeFactor::OnNewMail(MOOSMSG_LIST &NewMail)
     bool   mstr  = msg.IsString();
 #endif
 
-    int dval     = msg.GetDouble();
-    received_numbers.push_back(dval); // Push received numbers to list
+    string key      = msg.GetKey();
+    int dval        = msg.GetDouble();
+    string sval     = msg.GetString();
 
+    if (MOOSStrCmp(key, "NUM_VALUE"))
+    {
+      // Create PrimeEntry object and set init values
+      PrimeEntry e;
+      e.setOriginalVal(strtoul(sval.c_str(), NULL, 0));
+      e.setReceivedIndex(m_total_num_received);
+
+      m_total_num_received++; // Increment
+     
+      m_received_numbers.push_back(e); // Add entry to list of entries
+    }
   }
    return(true);
 }
@@ -71,14 +87,33 @@ bool PrimeFactor::OnConnectToServer()
 
 bool PrimeFactor::Iterate()
 {
-  list<int>::iterator p;
-  for (p=received_numbers.begin(); p!=received_numbers.end(); ++p){
-    int num = *p;
+  list<PrimeEntry>::iterator p;
+  for (p=m_received_numbers.begin(); p!=m_received_numbers.end(); ++p){
+    {
+      PrimeEntry e = *p;
+      if (!e.done())
+      {
+        e.setDone(e.factor(1000));
+        if (e.done())
+        {
+          e.setCalculatedIndex(m_total_num_calculated);
+
+          m_total_num_calculated++;
+
+          Notify("PRIME_RESULT", e.getReport());
+        }
+      }
+    }
+
+
+
+
+    /* From previous iteration below
     if (num%2==0)
       Notify("NUM_RESULT", to_string(num) + ", even");
     else
       Notify("NUM_RESULT", to_string(num) + ", odd");
-    p = received_numbers.erase(p);
+    p = m_received_numbers.erase(p); */
   }
 
   return(true);
