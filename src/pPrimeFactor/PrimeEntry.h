@@ -8,7 +8,6 @@
  #include <string>
  #include <vector>
  #include <cstdint>
-#include <algorithm>
 
  #ifndef PRIME_ENTRY_HEADER
  #define PRIME_ENTRY_HEADER
@@ -29,12 +28,13 @@
 
          bool   factor(unsigned long int max_steps);
 
-         std::string  getFactorsString();
+         std::string  getFactors();
          std::string  getReport();
 
      protected:
          uint64_t         m_start_index;
          uint64_t         m_orig;
+         uint64_t         m_remainder;
          bool             m_done;
          unsigned int     m_received_index;
          unsigned int     m_calculated_index;

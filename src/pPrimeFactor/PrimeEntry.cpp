@@ -21,6 +21,7 @@ PrimeEntry::PrimeEntry()
 {
     m_start_index      = 0;
     m_orig             = 0;
+    m_remainder        = 0;
     m_done             = false;
     m_received_index   = 0;
     m_calculated_index = 0;
@@ -41,27 +42,36 @@ PrimeEntry::~PrimeEntry()
 
 void PrimeEntry::setOriginalVal(unsigned long int val)
 {
-    m_orig = val;
+    m_orig      = val;
+    m_remainder = val;
 }
 
 
 bool PrimeEntry::factor(unsigned long int max_steps)
 {
-    unsigned long int start;
-    (m_start_index > 2) ? start = m_start_index : start = 2;
+    int num_it = 0;
+    unsigned long int div;
+    (m_start_index > 2) ? div = m_start_index : div = 2;
 
-    for (unsigned long int i = start; i < max_steps; i++)
+    while (m_remainder != 1 && num_it < max_steps)
     {
-        if ( m_orig % i == 0 )
+        if (m_remainder % div == 0)
         {
-            m_factors.push_back(i);
+            m_factors.push_back(div);
+            m_remainder /= div;
+        }
+        else
+        {
+            m_start_index++;
         }
     }
+
+
 
     return true;
 }
 
-string PrimeEntry::getFactorsString()
+string PrimeEntry::getFactors()
 {
     string factors;
 
@@ -80,7 +90,7 @@ string PrimeEntry::getReport()
         ",received=" + to_string(m_received_index) +
         ",calculated=" + to_string(m_calculated_index) +
         ",solve_time=" + to_string(m_solve_time) +
-        ",primes=" + getFactorsString() +
+        ",primes=" + getFactors() +
         ",username=pathorse";
    
     return report;
