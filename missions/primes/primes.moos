@@ -1,0 +1,50 @@
+// Configuration file: P. Thorseth
+
+ServerHost = localhost
+ServerPort = 9000
+
+Community  = alder
+
+//------------------------------------------
+// Antler configuration  block
+
+
+ProcessConfig = ANTLER
+{
+  MSBetweenLaunches = 200
+
+  Run = MOOSDB		  @ NewConsole = false
+  Run = pPrimeFactor  @ NewConsole = false
+  Run = uTimerScript  @ NewConsole = false
+  Run = pLogger       @ NewConsole = false
+}
+
+
+ProcessConfig = uTimerScript
+{
+    AppTick     = 4
+    CommsTick   = 4
+
+    rand_var    = varname=RND_VAL, min=0, max=100, key=at_post
+
+    event = var=NUM_VALUE, val=$[RND_VAL], time=0
+    event = var=NUM_VALUE, val=$[RND_VAL], time=1
+    event = var=NUM_VALUE, val=$[RND_VAL], time=2
+    event = var=NUM_VALUE, val=$[RND_VAL], time=3
+    event = var=NUM_VALUE, val=$[RND_VAL], time=4
+    event = var=NUM_VALUE, val=$[RND_VAL], time=5
+    event = var=NUM_VALUE, val=$[RND_VAL], time=6
+
+    reset_max   = 0
+    reset_time  = all-posted
+}
+
+ProcessConfig = pLogger
+{
+    AsyncLog = true
+    WildCardLogging = true
+    WildCardOmitPattern = *_STATUS
+
+    LOG =  PRIME_RESULT @ 0
+    LOG =  NUM_VALUE @ 0
+}
