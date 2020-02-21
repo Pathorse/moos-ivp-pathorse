@@ -54,8 +54,8 @@ bool PrimeFactor::OnNewMail(MOOSMSG_LIST &NewMail)
 #endif
 
     string key      = msg.GetKey();
-    int dval        = msg.GetDouble();
-    string sval     = msg.GetString();
+    string sval     = msg.GetString(); 
+    Notify("MSG", "Entered new mail loop correct1");
 
     if (MOOSStrCmp(key, "NUM_VALUE"))
     {
@@ -63,6 +63,9 @@ bool PrimeFactor::OnNewMail(MOOSMSG_LIST &NewMail)
       PrimeEntry e;
       e.setOriginalVal(strtoul(sval.c_str(), NULL, 0));
       e.setReceivedIndex(m_total_num_received);
+      
+      
+      Notify("MSG", "Entered new mail loop correct2");
 
       m_total_num_received++; // Increment
      
@@ -90,7 +93,7 @@ bool PrimeFactor::Iterate()
   list<PrimeEntry>::iterator p;
   for (p=m_received_numbers.begin(); p!=m_received_numbers.end(); ++p){
     {
-      PrimeEntry e = *p;
+      PrimeEntry& e = *p;
       if (!e.done())
       {
         e.setDone(e.factor(1000));
