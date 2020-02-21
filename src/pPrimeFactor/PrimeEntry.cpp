@@ -24,8 +24,9 @@ PrimeEntry::PrimeEntry()
     m_remainder        = 0;
     m_done             = false;
     m_received_index   = 0;
+    m_received_time    = 0;
     m_calculated_index = 0;
-    m_solve_time       = 0;
+    m_calculated_time  = 0;
 
     m_factors          = {};
 }
@@ -91,7 +92,7 @@ string PrimeEntry::getReport()
     report = "orig=" +  to_string(m_orig) +
         ",received=" + to_string(m_received_index) +
         ",calculated=" + to_string(m_calculated_index) +
-        ",solve_time=" + to_string(m_solve_time) +
+        ",solve_time=" + to_string(m_calculated_time - m_received_time) +
         ",primes=" + getFactors() +
         ",username=pathorse";
    

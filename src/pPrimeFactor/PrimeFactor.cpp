@@ -63,6 +63,7 @@ bool PrimeFactor::OnNewMail(MOOSMSG_LIST &NewMail)
       PrimeEntry e;
       e.setOriginalVal(strtoul(sval.c_str(), NULL, 0));
       e.setReceivedIndex(m_total_num_received);
+      e.setReceivedTime(MOOSTime());
       
       
       Notify("MSG", "Entered new mail loop correct2");
@@ -96,10 +97,14 @@ bool PrimeFactor::Iterate()
       PrimeEntry& e = *p;
       if (!e.done())
       {
-        e.setDone(e.factor(1000));
+        Notify("MSG2", "some entries not done");
+        bool d  = e.factor(1000);
+        Notify("MSG3", to_string(d));
+        e.setDone(d);
         if (e.done())
         {
           e.setCalculatedIndex(m_total_num_calculated);
+          e.setCalculatedTime(MOOSTime());
 
           m_total_num_calculated++;
 
