@@ -15,28 +15,46 @@ ProcessConfig = ANTLER
 
   Run = MOOSDB		  @ NewConsole = false
   Run = pPrimeFactor  @ NewConsole = false
-  //Run = uTimerScript  @ NewConsole = false
+  //Run = uTimerScript  @ NewConsole = false ~uTimerScriptA
+  Run = uTimerScript  @ NewConsole = false ~uTimerScriptB
   Run = pLogger       @ NewConsole = false
 }
 
 
-ProcessConfig = uTimerScript
+ProcessConfig = uTimerScriptA
 {
-    AppTick     = 4
-    CommsTick   = 4
+   AppTick   = 4
+   CommsTick = 4
 
-    rand_var    = varname=RND_VAL, min=0, max=100, key=at_post
+   paused     = false
+   event      = var=NUM_VALUE, val="$(15)", time=0.25
+   event      = var=NUM_VALUE, val="$(9)", time=0.50
+   event      = var=NUM_VALUE, val="$(7)", time=0.75
+   event      = var=NUM_VALUE, val="$(5)", time=1.00
+   reset_max  = nolimit
+   reset_time = all-posted
+}
 
-    event = var=NUM_VALUE, val=$[RND_VAL], time=0
-    event = var=NUM_VALUE, val=$[RND_VAL], time=1
-    event = var=NUM_VALUE, val=$[RND_VAL], time=2
-    event = var=NUM_VALUE, val=$[RND_VAL], time=3
-    event = var=NUM_VALUE, val=$[RND_VAL], time=4
-    event = var=NUM_VALUE, val=$[RND_VAL], time=5
-    event = var=NUM_VALUE, val=$[RND_VAL], time=6
+ProcessConfig = uTimerScriptB
+{
+   AppTick     = 4
+   CommsTick   = 4
 
-    reset_max   = 0
-    reset_time  = all-posted
+   event  = var=NUM_VALUE, val="112582705942171", time=0.25
+   event  = var=NUM_VALUE, val="115797848077099", time=0.50
+   event  = var=NUM_VALUE, val="117463495419967", Time=0.75
+
+   event  = var=NUM_VALUE, val="125", time=1.00
+   event  = var=NUM_VALUE, val="225", time=1.25
+   event  = var=NUM_VALUE, val="325", time=1.50
+
+   event  = var=NUM_VALUE, val="123939877913659", time=1.75
+   event  = var=NUM_VALUE, val="126794093929207", time=2.00
+   event  = var=NUM_VALUE, val="129263144299543", time=2.25
+
+   reset_max  = 0
+   reset_time = all-posted
+
 }
 
 ProcessConfig = pLogger

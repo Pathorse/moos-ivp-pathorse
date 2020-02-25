@@ -1,8 +1,8 @@
 /************************************************************/
-/*    NAME: Paal Arthur S. Thorseth                                              */
+/*    NAME: Paal Arthur S. Thorseth                         */
 /*    ORGN: MIT                                             */
-/*    FILE: PrimeFactor.cpp                                        */
-/*    DATE:                                                 */
+/*    FILE: PrimeFactor.cpp                                 */
+/*    DATE: 02.24.2020                                      */
 /************************************************************/
 
 #include <iterator>
@@ -18,8 +18,8 @@ using namespace std;
 
 PrimeFactor::PrimeFactor()
 {
-  m_total_num_received    = 0;
-  m_total_num_calculated  = 0;
+  m_total_num_received    = 1; // Apply 1 indexing
+  m_total_num_calculated  = 1; // Apply 1 indexing
   m_received_numbers    = {};
 }
 
@@ -53,22 +53,19 @@ bool PrimeFactor::OnNewMail(MOOSMSG_LIST &NewMail)
     bool   mstr  = msg.IsString();
 #endif
 
-    string key      = msg.GetKey();
-    string sval     = msg.GetString(); 
-    Notify("MSG", "Entered new mail loop correct1");
+    string key      = msg.GetKey();    // Identifier
+    string sval     = msg.GetString(); // String attribute (only strings expected)
 
+    // Condition on messages with NUM_VALUE key
     if (MOOSStrCmp(key, "NUM_VALUE"))
     {
-      // Create PrimeEntry object and set init values
+      // Create PrimeEntry object and set attributes
       PrimeEntry e;
-      e.setOriginalVal(strtoul(sval.c_str(), NULL, 0));
+      e.setOriginalVal(strtoul(sval.c_str(), NULL, 0)); // strtoul used for converting string to unsiged long int
       e.setReceivedIndex(m_total_num_received);
       e.setReceivedTime(MOOSTime());
       
-      
-      Notify("MSG", "Entered new mail loop correct2");
-
-      m_total_num_received++; // Increment
+      m_total_num_received++; // Increment total number of received elements
      
       m_received_numbers.push_back(e); // Add entry to list of entries
     }
@@ -91,37 +88,29 @@ bool PrimeFactor::OnConnectToServer()
 
 bool PrimeFactor::Iterate()
 {
+
+  // Iterate through all prime entries and do prime factorization
   list<PrimeEntry>::iterator p;
   for (p=m_received_numbers.begin(); p!=m_received_numbers.end(); ++p){
     {
       PrimeEntry& e = *p;
       if (!e.done())
       {
-        Notify("MSG2", "some entries not done");
-        bool d  = e.factor(1000);
-        Notify("MSG3", to_string(d));
-        e.setDone(d);
-        if (e.done())
+        e.setDone(e.factor(1000000, 0.2, false, true)); // Do prime factorization and set done attribute accordingly
+
+        if (e.done()) // Enter upon completion and set attributes
         {
           e.setCalculatedIndex(m_total_num_calculated);
           e.setCalculatedTime(MOOSTime());
 
-          m_total_num_calculated++;
+          m_total_num_calculated++; // Increment total number of calculated elements
 
-          Notify("PRIME_RESULT", e.getReport());
+          Notify("PRIME_RESULT", e.getReport()); // Report back using PRIME_RESULT
+
+          p = m_received_numbers.erase(p); // Erase to avoid iterating over completed numbers
         }
       }
     }
-
-
-
-
-    /* From previous iteration below
-    if (num%2==0)
-      Notify("NUM_RESULT", to_string(num) + ", even");
-    else
-      Notify("NUM_RESULT", to_string(num) + ", odd");
-    p = m_received_numbers.erase(p); */
   }
 
   return(true);

@@ -1,8 +1,8 @@
 /************************************************************/
-/*    NAME: Paal Arthur S. Thorseth                                              */
+/*    NAME: Paal Arthur S. Thorseth                         */
 /*    ORGN: MIT                                             */
-/*    FILE: PrimeFactor.h                                          */
-/*    DATE:                                                 */
+/*    FILE: PrimeFactor.h                                   */
+/*    DATE: 02.24.2020                                      */
 /************************************************************/
 
 #ifndef PrimeFactor_HEADER
