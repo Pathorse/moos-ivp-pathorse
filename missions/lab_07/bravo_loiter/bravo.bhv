@@ -46,6 +46,8 @@ Behavior = BHV_Loiter
   //condition    = RETURN = false
   updates      = LOITER_UPDATES        // example
   perpetual    = true
+  duration     = 150
+  endflag      = RETURN = true
 
   // Parameters specific to this behavior
   // ------------------------------------
