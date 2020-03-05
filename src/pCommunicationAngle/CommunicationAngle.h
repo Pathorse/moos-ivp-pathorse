@@ -31,7 +31,7 @@ class CommunicationAngle : public CMOOSApp
         double depth(double s);
         double soundSpeed(double depth);
         double pressureFieldAmplitude(double s);
-        double crossSectionalArea(double s, double delta_s);
+        double crossSectionalArea(double s, double delta_s, double& prev_theta);
         double transmissionLoss(double s);
 
         bool   validPath();

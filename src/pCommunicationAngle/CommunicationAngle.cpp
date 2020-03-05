@@ -156,21 +156,23 @@ bool CommunicationAngle::Iterate()
 
 
     point a  = {0, m_ownship.getDepth()}; // Ownship pos in rz-plane
+    m_z0 = a.z; // TODO quickfix not to be permanent
     point b  = {distance(q,r), m_collaborator.getDepth()}; // Collaborator pos in rz-plane
     point c  = circleCenter(a, b, - m_surface_sound_speed/m_sound_speed_gradient); // Circle center
     Notify("MSG1", "Circle center: r=" + to_string(c.r) + ", z=" + to_string(c.z));
+
     // Update Circle Radius R and initial grazing angle theta0
     m_R      = distance(c, a);
-    double r_test = distance(c, b);
-    Notify("MSG2", "Radius to circle center: R=" + to_string(m_R) + ", testradius: R=" + to_string(r_test));
+    Notify("MSG2", "Radius to circle center: R=" + to_string(m_R));
 
-    m_theta0 = atan( abs((a.r - c.r)/abs(a.z - c.z)) );
-    Notify("MSG3", "Elev angle, theta0=" + to_string(m_theta0));
+    m_theta0 = - atan( abs((a.r - c.r)/abs(a.z - c.z)) );
+    Notify("MSG3", "Elev angle, theta0=" + to_string(m_theta0 * 180/PI));
 
 
     // Update arc length s between point a, b
     double L = distance(a, b);
     m_s      = m_R * acos( (2 * pow(m_R, 2) - pow(L, 2))/(2 * pow(m_R, 2)) );
+    Notify("MSG4", "Arc length: s=" + to_string(m_s));
 
  
     // Update ACOUSTIC_PATH
@@ -179,8 +181,7 @@ bool CommunicationAngle::Iterate()
       Notify("ACOUSTIC_PATH",
              "elev_angle=" + to_string(m_theta0)  +
              ", transmission_loss=" + to_string(transmissionLoss(m_s)) +
-             ", id=" + m_user_id +
-             ", radius=" + to_string(m_R));
+             ", id=" + m_user_id);
       Notify("CONNECTIVITY_LOCATION",
              "x=" + to_string(m_ownship.getNavX()) +
              ", y=" + to_string(m_ownship.getNavY()) +
@@ -280,32 +281,91 @@ double CommunicationAngle::soundSpeed(double z)
 }
 
 
-double CommunicationAngle::crossSectionalArea(double curr_s, double prev_s)
-{
-  return m_R * range(prev_s) * ( range(curr_s) - range(prev_s) )/( depth(curr_s) - depth(prev_s) );
-}
+//double CommunicationAngle::crossSectionalArea(double curr_s, double prev_s, double& prev_theta)
+//{
+//  double dr = range(curr_s) - range(prev_s);
+//  double dz = depth(curr_s) - depth(prev_s);
+//
+//  double theta = atan(dr/dz);
+//  double dtheta = theta - prev_theta;
+//
+//  prev_theta = theta;
+//
+//  //return m_R * range(prev_s) * ( range(curr_s) - range(prev_s) )/( depth(curr_s) - depth(prev_s) );
+//  return range(prev_s)/sin(theta) * dr/dtheta;
+//}
+
+
+
+//double CommunicationAngle::pressureFieldAmplitude(double s)
+//{
+//  double ds     = 10;
+//  double prev_s = 0;
+//  double prev_theta = m_theta0;
+//
+//  for (double curr_s = ds; curr_s <= s; curr_s += ds)
+//  {
+//
+//    double p = 1/(4*PI) *
+//                  sqrt(abs(((soundSpeed(depth(prev_s)))
+//                            * cos(m_theta0))/(soundSpeed(m_z0)
+//                                              * crossSectionalArea(curr_s, prev_s, prev_theta))));
+//
+//    m_p.push_back(p);
+//
+//    prev_s = curr_s;
+//  }
+//  Notify("MSG6", "p_it=" + to_string(*m_p.end()));
+//  return *m_p.end();
+//}
 
 
 double CommunicationAngle::pressureFieldAmplitude(double s)
 {
-  double ds     = 0.1;
-  double prev_s = 0;
-  for (double curr_s = ds; curr_s <= s; curr_s += ds)
+  double dr = 0;
+  double dz = 0;
+  double dtheta = 0;
+
+
+  double ds = 10; // stepsize
+
+  double curr_theta = m_theta0;
+  double prev_theta = m_theta0;
+  double curr_s     = 0;
+  double prev_s     = 0;
+
+  double J = 0;
+  double p = 0;
+
+  for (curr_s = ds; curr_s <= s; curr_s += s)
   {
+    dr = range(curr_s) - range(prev_s);
+    dz = depth(curr_s) - depth(prev_s);
 
-    m_p.push_back(1/(4*PI) *
-                  sqrt(abs(((soundSpeed(depth(prev_s)))
-                            * cos(m_theta0))/(soundSpeed(m_z0)
-                                              * crossSectionalArea(curr_s, prev_s)))));
+    curr_theta = atan(dr/dz);
 
-    prev_s = curr_s;
+    dtheta = curr_theta - prev_theta;
+
+    J = range(prev_s)/sin(curr_theta) * dr/dtheta;
+
+
+    p = 1/(4*PI) * sqrt( abs( ( soundSpeed(depth(prev_s)) * cos(m_theta0) /
+                                (soundSpeed(depth(0)) * J) ) ) );
+
+    m_p.push_back(p);
+
+    prev_s     = curr_s;
+    prev_theta = curr_theta;
   }
-  return *m_p.end();
+
+  return p;
+
 }
 
 
 double CommunicationAngle::transmissionLoss(double s)
 {
+  Notify("MSG5", "P(s)=" + to_string(pressureFieldAmplitude(s)) + ", P(1)=" + to_string(pressureFieldAmplitude(1)));
   return -20 * log10( pressureFieldAmplitude(s)/pressureFieldAmplitude(1) );
 }
 
