@@ -2,6 +2,7 @@
 
 initialize   DEPLOY = false
 initialize   RETURN = false
+initialize   MOOS_MANUAL_OVERRIDE = false
 initialize   TEST1  = false
 initialize   TEST2  = false
 	

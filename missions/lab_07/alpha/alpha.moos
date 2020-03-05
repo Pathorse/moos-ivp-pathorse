@@ -198,6 +198,7 @@ ProcessConfig = pMarineViewer
 
   left_context[return_point] = RETURN_UPDATE = "points=$(XPOS),$(YPOS)"
   left_context[return_point] = RETURN=true
+  left_context[return_point] = DEPLOY=true
   left_context[return_point] = VIEW_POINT = x=$(XPOS),y=$(YPOS),label=return_point
   //left_context[view_point] = VIEW_POINT = x=$(XPOS),y=$(YPOS),label=hello
   //left_context[view_poly] = VIEW_POLYGON = format=radial,x=$(XPOS),y=$(YPOS), radius=10, pts=8, edge_size=1,label=mypoly
