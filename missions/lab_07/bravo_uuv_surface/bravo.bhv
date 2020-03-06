@@ -22,36 +22,34 @@ set MODE = RETURNING
     RETURN = true
 }
 
+set MODE = LOITERING
+{
+  MODE = ACTIVE
+  LOITER = true
+}
 set MODE = LOITER_A
 {
-    MODE = ACTIVE
-    LOITER = true
+    MODE = ACTIVE:LOITERING
     LOITER_REGION = A
+} LOITER_B
+
+set MODE = SURFACING
+{
+    MODE            = ACTIVE
+    SURFACE_REQUEST = true
 }
 
-set MODE = LOITER_B
+set MODE = CALIBRATING
 {
-    MODE = ACTIVE
-    LOITER = true
-    LOITER_REGION = B
+    MODE = ACTIVE:SURFACING
+    DEPTH_DIFF = 0
 }
-//set MODE = SURFACING
-//{
-//    MODE            = ACTIVE
-//    SURFACE_REQUEST = true
-//}
-//
-//set MODE = CALIBRATING
-//{
-//    MODE = SURFACING
-//    CALIBRATE = true
-//}
-//
-//set MODE = WPT_SURVEY
-//{
-//    MODE  = ACTIVE
-//    WPT   = true
-//}
+
+set MODE = WPT_SURVEY
+{
+    MODE  = ACTIVE
+    WPT   = true
+}
 
 //----------------------------------------------
 Behavior = BHV_Loiter
@@ -61,8 +59,6 @@ Behavior = BHV_Loiter
   name         = loiter_a               // example
   pwt          = 100                   // default
   condition    = MODE==LOITER_A
-  //condition    = DEPLOY_LOITER = true
-  //condition    = RETURN = false
   updates      = LOITER_UPDATES        // example
   perpetual    = true
   duration     = 150
@@ -220,6 +216,8 @@ Behavior = BHV_ConstantDepth
   name         = const_dep_survey_a   // example
   pwt          = 100                // default
   condition    = MODE==LOITER_A    // example
+  condition    = MODE!=SURFACING
+  condition    = MODE!=CALIBRATING
   updates      = CONST_DEP_UPDATES  // example
 
   // Parameters specific to this behavior
@@ -240,6 +238,8 @@ Behavior = BHV_ConstantDepth
   name         = const_dep_survey_b   // example
   pwt          = 100                // default
   condition    = MODE==LOITER_B    // example
+  condition    = MODE!=SURFACING
+  condition    = MODE!=CALIBRATING
   updates      = CONST_DEP_UPDATES  // example
 
   // Parameters specific to this behavior
@@ -252,64 +252,64 @@ Behavior = BHV_ConstantDepth
          summitdelta = 50           // default
 }
 
-////----------------------------------------------
-//Behavior = BHV_ConstantDepth
-//{
-//  // General Behavior Parameters
-//  // ---------------------------
-//  name         = const_dep_surface   // example
-//  pwt          = 100                // default
-//  condition    = MODE==SURFACING    // example
-//  updates      = CONST_DEP_UPDATES  // example
-//  endflag      = CALIBRATE = true
-//  perpetual    = true
-//
-//  // Parameters specific to this behavior
-//  // ------------------------------------
-//           basewidth = 100          // default
-//               depth = 0            // default
-//  depth_mismatch_var = DEPTH_DIFF   // example
-//            duration = no-time-limit            // default
-//           peakwidth = 3            // default
-//         summitdelta = 50           // default
-//}
-//
-////----------------------------------------------
-//Behavior = BHV_Timer
-//{
-//  // General Behavior Parameters
-//  // ---------------------------
-//  name         = bhv_timer_surface            // default
-//  condition    = MODE==ACTIVE
-//  condition    = MODE!=SURFACING
-//  duration     = 200                  // example
-//  duration_idle_decay = false
-//  endflag      = SURFACE_REQUEST = true          // example
-//  endflag      = LOITER = false
-//  updates      = TIMER_UPDATES        // example
-//  perpetual    = true
-//
-//  // Parameters specific to this behavior
-//  // ------------------------------------
-//  // None
-//}
-//
-////----------------------------------------------
-//Behavior = BHV_Timer
-//{
-//  // General Behavior Parameters
-//  // ---------------------------
-//  name         = bhv_timer_calibrate            // default
-//  condition    = MODE==CALIBRATING
-//  duration     = 60                  // example
-//  duration_idle_decay = false
-//  endflag      = CALIBRATE = false
-//  endflag      = SURFACE_REQUEST = false
-//  endflag      = LOITER = true
-//  updates      = TIMER_UPDATES        // example
-//  perpetual    = true
-//
-//  // Parameters specific to this behavior
-//  // ------------------------------------
-//  // None
-//}
+//----------------------------------------------
+Behavior = BHV_ConstantDepth
+{
+  // General Behavior Parameters
+  // ---------------------------
+  name         = const_dep_surface   // example
+  pwt          = 100                // default
+  condition    = MODE==SURFACING    // example
+  updates      = CONST_DEP_UPDATES  // example
+  perpetual    = true
+
+  // Parameters specific to this behavior
+  // ------------------------------------
+           basewidth = 100          // default
+               depth = 0            // default
+  depth_mismatch_var = DEPTH_DIFF   // example
+            duration = no-time-limit
+           peakwidth = 3            // default
+         summitdelta = 50           // default
+}
+
+//----------------------------------------------
+Behavior = BHV_Timer
+{
+  // General Behavior Parameters
+  // ---------------------------
+  name         = bhv_timer_surface            // default
+  condition    = MODE==ACTIVE
+  condition    = MODE!=ACTIVE:SURFACING
+  condition    = MODE!=ACTIVE:SURFACING:CALIBRATING
+  duration     = 200                  // example
+  duration_idle_decay = false
+  endflag      = SURFACE_REQUEST = true          // example
+  endflag      = LOITER = false
+  updates      = TIMER_UPDATES        // example
+  perpetual    = true
+
+  // Parameters specific to this behavior
+  // ------------------------------------
+  // None
+}
+
+//----------------------------------------------
+Behavior = BHV_Timer
+{
+  // General Behavior Parameters
+  // ---------------------------
+  name         = bhv_timer_calibrate            // default
+  condition    = MODE==CALIBRATING
+  duration     = 60                  // example
+  duration_idle_decay = false
+  endflag      = CALIBRATE = false
+  endflag      = SURFACE_REQUEST = false
+  endflag      = LOITER = true
+  updates      = TIMER_UPDATES        // example
+  perpetual    = true
+
+  // Parameters specific to this behavior
+  // ------------------------------------
+  // None
+}
