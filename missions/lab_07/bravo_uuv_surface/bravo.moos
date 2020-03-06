@@ -1,5 +1,6 @@
-/-------------------------------------------------
+//-------------------------------------------------
 // NAME: M. Benjamin, MIT CSAIL
+// EDIT: Paal Arthur S. Thorseth, March 2020
 // FILE: bravo.moos
 //-------------------------------------------------
 
@@ -24,7 +25,7 @@ ProcessConfig = ANTLER
 
   Run = MOOSDB          @ NewConsole = false
   Run = pLogger         @ NewConsole = false
-  Run = uSimMarine	@ NewConsole = false
+  Run = uSimMarine	    @ NewConsole = false
   Run = pMarinePID      @ NewConsole = false
   Run = pHelmIvP        @ NewConsole = false
   Run = pMarineViewer	@ NewConsole = false
@@ -102,10 +103,10 @@ ProcessConfig = uSimMarine
   thrust_reflect = true
 
 
-  buoyancy_rate = 0.15
-  max_depth_rate = 5
+  buoyancy_rate        = 0.15
+  max_depth_rate       = 5
   max_depth_rate_speed = 2.0
-  default_water_depth = 400
+  default_water_depth  = 400
 }
 
 //------------------------------------------
@@ -246,9 +247,9 @@ ProcessConfig = pMarineViewer
   scope  = MVIEWER_LCLICK
   scope  = MVIEWER_RCLICK
 
-  button_one = DEPLOY # DEPLOY=true
-  button_one = MOOS_MANUAL_OVERRIDE=false # RETURN=false
-  button_two = RETURN # RETURN=true
+  //button_one = DEPLOY # DEPLOY=true
+  //button_one = MOOS_MANUAL_OVERRIDE=false # RETURN=false
+  //button_two = RETURN # RETURN=true
 
   action  = MENU_KEY=deploy # DEPLOY = true # RETURN = false
   action+ = MENU_KEY=deploy # MOOS_MANUAL_OVERRIDE=false
@@ -262,7 +263,7 @@ ProcessConfig = pMarineViewer
 
 ProcessConfig = pNodeReporter
 {
-  AppTick    = 2
+  AppTick      = 2
   CommsTick	 = 2
 
   platform_type   = UUV
