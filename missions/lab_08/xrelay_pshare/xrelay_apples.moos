@@ -10,8 +10,8 @@ ProcessConfig = ANTLER
 
   Run = MOOSDB @ NewConsole = false
   Run = pLogger @ NewConsole = false
-  // Run = pXRelay @ NewConsole = true ~ pXRelay_PEARS
-  Run = pXRelay @ NewConsole = true ~ pXRelay_APPLES
+  Run = pXRelay @ NewConsole = true ~ pXRelay_PEARS
+  // Run = pXRelay @ NewConsole = true ~ pXRelay_APPLES
   Run = pShare @ NewConsole = false
   Run = uXMS @ NewConsole = true
 }
