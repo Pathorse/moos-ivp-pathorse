@@ -144,17 +144,19 @@ void PointAssign::assignPoint(string point, string vehicle, bool all_vehicles)
 
 void PointAssign::assignPoints()
 {
-  int num_vehicles = m_vehicles.size();
-  int num_points   = m_visiting_points.size();
+  int num_vehicles  = m_vehicles.size();
+  int num_points    = m_visiting_points.size();
 
-  int n            = num_points / num_vehicles;
+  int p_per_vehicle = num_points / num_vehicles;
 
+  list<string>::iterator vehicle = m_vehicles.begin();
   list<string>::iterator point;
+
   for (point = m_visiting_points.begin(); point!= m_visiting_points.end(); point++)
   {
-    string x    = tokStringParse(point, "x", ',', '=');
-    string y    = tokStringParse(point, "y", ',', '=');
-    int    id   = atoi(tokStringParse(point, "id", ',', '='));
+    //string x    = tokStringParse(point, "x", ',', '=');
+    //string y    = tokStringParse(point, "y", ',', '=');
+    //int    id   = atoi(tokStringParse(point, "id", ',', '='));
 
     if ( *point == "firstpoint" )
     {
@@ -172,14 +174,11 @@ void PointAssign::assignPoints()
       }
       else
       {
-        list<string>::iterator v_it;
-        list<string>::iterator p_it;
-
-        int num_points = m_visiting_points.size();
-        int num_vehicles = m_vehicles.size();
-
-        int p_per_vehicle = num_points / num_vehicles;
-
+        assignPoint(*point, *vehicle, false);
+        if ( vehicle == m_vehicles.end() )
+          vehicle = m_vehicles.begin();
+        else
+          vehicle++;
       }
     }
 
