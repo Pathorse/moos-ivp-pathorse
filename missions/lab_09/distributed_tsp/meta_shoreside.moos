@@ -19,7 +19,7 @@ Processconfig = ANTLER
   //Run = pLogger         @ NewConsole = false
   //Run = pShare          @ NewConsole = false
   //Run = pHostInfo       @ NewConsole = false
-  //Run = uFldShoreBroker @ NewConsole = false
+  Run = uFldShoreBroker @ NewConsole = false
 }
 
 //#include plug_pShare.moos
@@ -40,7 +40,24 @@ ProcessConfig = uTimerScript
   event = var=VISIT_POINT, val="x=$[RND_VAL_X], y=$[RND_VAL_Y], id=$[TCOUNT]", time=0, amt=100
   event = var=VISIT_POINT, val="lastpoint", time=0
 }
-//
+//--------------------------------------------------
+// uFldShoreBroker Configuration Block
+
+ProcessConfig = uFldShoreBroker
+{
+  AppTick       = 1
+  CommsTick     = 1
+
+  QBRIDGE  = DEPLOY, NODE_REPORT
+  QBRIDGE  = STATION_KEEP, APPCAST_REQ
+
+  BRIDGE   = src=RETURN_ALL, alias=RETURN
+  BRIDGE   = src=RETURN_$V,  alias=RETURN
+
+  BRIDGE   = src=VISIT_POINT_$V, alias=VISIT_POINT
+}
+
+
 ////--------------------------------------------------
 //// uFldShoreBroker Configuration Block
 //
