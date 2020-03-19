@@ -1,7 +1,7 @@
 /************************************************************/
-/*    NAME: Paal Arthur S. Thorseth                                              */
+/*    NAME: Paal Arthur S. Thorseth                         */
 /*    ORGN: MIT                                             */
-/*    FILE: PointAssign.h                                          */
+/*    FILE: PointAssign.h                                   */
 /*    DATE:                                                 */
 /************************************************************/
 
@@ -25,16 +25,17 @@ class PointAssign : public CMOOSApp
     protected:
         void RegisterVariables();
 
-        void handlePoints(list<string> &points);
+        void postViewPoint(double x, double y, std::string label, std::string color);
+        void assignPoint(std::string point, std::string vehicle, bool all_vehicles=false);
+        void assignPoints();
 
-        bool initComplete();
 
     private: // Configuration variables
+        bool                        m_assign_by_region;
+        std::list<std::string>      m_vehicles;
 
     private: // State variables
-        list<string>     m_vehicles;
-        list<string>     m_visiting_points;
-        map<string,bool> m_init;
+        std::list<std::string>      m_visiting_points;
 };
 
 #endif 

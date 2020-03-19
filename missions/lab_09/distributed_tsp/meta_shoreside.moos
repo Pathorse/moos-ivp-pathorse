@@ -13,6 +13,7 @@ Processconfig = ANTLER
   MSBetweenLaunches = 100
 
   Run = MOOSDB          @ NewConsole = false
+  Run = pPointAssign    @ NewConsole = false
   Run = uTimerScript    @ NewConsole = false
   //Run = pMarineViewer   @ NewConsole = false
   //Run = pLogger         @ NewConsole = false
@@ -29,6 +30,9 @@ Processconfig = ANTLER
 // uTimerScript Configuration Block
 ProcessConfig = uTimerScript
 {
+  paused    = true
+  pause_var = UTS_PAUSE
+
   rand_var    = varname=RND_VAL_X, min=-25, max=200, key=at_post
   rand_var    = varname=RND_VAL_Y, min=-175, max=-25, key=at_post
 
