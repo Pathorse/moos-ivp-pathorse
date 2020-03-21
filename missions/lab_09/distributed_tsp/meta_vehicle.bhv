@@ -1,11 +1,11 @@
 //-----------------------------------------------
 // Helm Behavior file 
 
-initialize   DEPLOY  = true
-initialize   RETURN  = false
-initialize   STATION_KEEP = false
-initialize   LOITER  = true
-initialize   REFUEL  = false
+initialize   DEPLOY          = true
+initialize   RETURN          = false
+initialize   STATION_KEEP    = false
+initialize   REFUEL          = false
+initialize   TRANSIT         = true
 
 set MODE = ACTIVE {
   DEPLOY = true
@@ -21,10 +21,10 @@ set MODE = RETURNING {
   RETURN = true
 } 
 
-set MODE = LOITERING {
+set MODE = TRANSITING {
   MODE = ACTIVE
-  LOITER = true
-} 
+  TRANSIT = true
+}
 
 set MODE = REFUELING {
   MODE = ACTIVE:STATION-KEEPING
@@ -72,24 +72,38 @@ Behavior = BHV_Timer
 }
 
 //----------------------------------------------
-Behavior = BHV_Loiter
+Behavior = BHV_Waypoint
 {
-  name      = loiter
-  pwt       = 100
-  condition = MODE==LOITERING
+  // General Behavior Parameters
+  // ---------------------------
+  name         = transit               // example
+  pwt          = 100                   // default
+  condition    = MODE==TRANSITING      // example
+  updates      = TRANSIT_UPDATES       // example
 
-   post_suffix = A
-         speed = 1.3
-     clockwise = false
-        radius = 8.0
-     nm_radius = 15.0
-       polygon = radial::$(LOITER_POS), radius=20, pts=8, snap=1, label=$(VNAME)_LOITER
+  // Parameters specific to this behavior
+  // ------------------------------------
+     capture_radius = 3                       // default
+       capture_line = false                   // default
+               lead = -1                      // default
+        //lead_damper = -1                      // default
+      lead_to_start = false                   // default
+             //points = pts={-200,-200:30,-60}  // example
+              order = normal                  // default
+        post_suffix = $(VNAME)
+             repeat = 0                       // default
+        slip_radius = 15                      // default
+              speed = 1.2                     // default is zero
+            wptflag = HITPTS = $(X),$(Y)      // example
 
-  visual_hints = nextpt_color=white, nextpt_lcolor=khaki
-  visual_hints = edge_color=orange, vertex_color=white
-  visual_hints = edge_size=1, vertex_size=2
+       visual_hints = vertex_size  = 3             // default
+       visual_hints = edge_size    = 1             // default
+       visual_hints = vertex_color = dodger_blue   // default
+       visual_hints = edge_color   = white         // default
+       visual_hints = nextpt_color = yellow        // default
+       visual_hints = nextpt_lcolor = aqua         // default
+       visual_hints = nextpt_vertex_size = 5       // default
 }
-
 
 //----------------------------------------------
 Behavior = BHV_Waypoint

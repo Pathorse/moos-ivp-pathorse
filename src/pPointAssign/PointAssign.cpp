@@ -8,7 +8,9 @@
 #include <iterator>
 #include "MBUtils.h"
 #include "PointAssign.h"
+#include "XYPoint.h"
 #include <string>
+#include <stdlib.h>
 #include <cstdlib>
 
 
@@ -19,8 +21,9 @@ using namespace std;
 
 PointAssign::PointAssign()
 {
+  m_points_assigned  = false;
   m_assign_by_region = false;
-  m_vehicles         = {};
+  m_vehicles         = {"HENRY", "GILDA"};
 
   m_visiting_points  = {};
 }
@@ -58,11 +61,15 @@ bool PointAssign::OnNewMail(MOOSMSG_LIST &NewMail)
     string sval = msg.GetString();
 
 
+    Notify("TESTVAR1", "made it");
+
     if (MOOSStrCmp(key, "VISIT_POINT"))
     {
-      //assignPoint(sval);
       m_visiting_points.push_back(sval);
+      m_points_assigned = false;
+      Notify("TESTVAR2", "made it, num points added: " + to_string(m_visiting_points.size()));
     }
+    Notify("TESTVAR3", "made it, point: " + sval);
   }
   return(true);
 }
@@ -73,7 +80,8 @@ bool PointAssign::OnNewMail(MOOSMSG_LIST &NewMail)
 bool PointAssign::OnConnectToServer()
 {
    RegisterVariables();
-   Notify("UTS_PAUSE", false);
+   Notify("UTS_PAUSE", "false");
+
    return(true);
 }
 
@@ -83,6 +91,13 @@ bool PointAssign::OnConnectToServer()
 
 bool PointAssign::Iterate()
 {
+  //Notify("UTS_PAUSE", "false");
+  Notify("TESTVAR4", "made it");
+  if ( !m_points_assigned )
+  {
+    assignPoints();
+    m_points_assigned = true;
+  }
 
   return(true);
 }
@@ -109,12 +124,13 @@ bool PointAssign::OnStartUp()
         //handled
       }
 
-      if(param == "vname")
-        m_vehicles.push_back(value);
+      //if(param == "vname")
+      //  m_vehicles.push_back(value);
+
     }
   }
   
-  RegisterVariables();	
+  RegisterVariables();
   return(true);
 }
 
@@ -130,6 +146,7 @@ void PointAssign::RegisterVariables()
 
 void PointAssign::assignPoint(string point, string vehicle, bool all_vehicles)
 {
+
   if ( all_vehicles )
   {
     list<string>::iterator v_it;
@@ -138,7 +155,15 @@ void PointAssign::assignPoint(string point, string vehicle, bool all_vehicles)
   }
   else
   {
+    double x    = stof(tokStringParse(point, "x", ',', '='));
+    double y    = stof(tokStringParse(point, "y", ',', '='));
+    string id   = tokStringParse(point, "id", ',', '=');
+
     Notify("VISIT_POINT_" + vehicle, point);
+    if ( vehicle == "GILDA" )
+      postViewPoint(x, y, id, "yellow");
+    if ( vehicle == "HENRY" )
+      postViewPoint(x, y, id, "red");
   }
 }
 
@@ -154,10 +179,6 @@ void PointAssign::assignPoints()
 
   for (point = m_visiting_points.begin(); point!= m_visiting_points.end(); point++)
   {
-    //string x    = tokStringParse(point, "x", ',', '=');
-    //string y    = tokStringParse(point, "y", ',', '=');
-    //int    id   = atoi(tokStringParse(point, "id", ',', '='));
-
     if ( *point == "firstpoint" )
     {
       assignPoint("firstpoint", "", true);
@@ -174,13 +195,16 @@ void PointAssign::assignPoints()
       }
       else
       {
-        assignPoint(*point, *vehicle, false);
         if ( vehicle == m_vehicles.end() )
           vehicle = m_vehicles.begin();
-        else
-          vehicle++;
+
+        assignPoint(*point, *vehicle);
+
+        vehicle++;
+        //point = m_visiting_points.erase(point);
       }
     }
+
 
 
   }

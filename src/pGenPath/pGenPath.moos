@@ -1,9 +1,9 @@
 //------------------------------------------------
-// pPointAssign config block
+// pGenPath config block
 
-ProcessConfig = pPointAssign
+ProcessConfig = pGenPath
 {
    AppTick   = 4
    CommsTick = 4
-
 }
+

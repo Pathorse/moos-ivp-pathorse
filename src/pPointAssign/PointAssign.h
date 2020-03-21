@@ -29,8 +29,8 @@ class PointAssign : public CMOOSApp
         void assignPoint(std::string point, std::string vehicle, bool all_vehicles=false);
         void assignPoints();
 
-
     private: // Configuration variables
+        bool                        m_points_assigned;
         bool                        m_assign_by_region;
         std::list<std::string>      m_vehicles;
 
