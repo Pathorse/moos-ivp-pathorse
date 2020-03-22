@@ -22,7 +22,7 @@ using namespace std;
 PointAssign::PointAssign()
 {
   m_points_assigned  = false;
-  m_assign_by_region = false;
+  m_assign_by_region = true;
   m_vehicles         = {"HENRY", "GILDA"};
 
   m_visiting_points  = {};
@@ -80,7 +80,7 @@ bool PointAssign::OnNewMail(MOOSMSG_LIST &NewMail)
 bool PointAssign::OnConnectToServer()
 {
    RegisterVariables();
-   Notify("UTS_PAUSE", "false");
+   //Notify("UTS_PAUSE", "false");
 
    return(true);
 }
@@ -191,6 +191,13 @@ void PointAssign::assignPoints()
     {
       if (m_assign_by_region)
       {
+        double x    = stof(tokStringParse(*point, "x", ',', '='));
+        double y    = stof(tokStringParse(*point, "y", ',', '='));
+        string id   = tokStringParse(*point, "id", ',', '=');
+        if ( x >= 87.5 )
+          assignPoint(*point, "HENRY");
+        else
+          assignPoint(*point, "GILDA");
 
       }
       else

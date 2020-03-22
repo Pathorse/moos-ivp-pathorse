@@ -28,13 +28,17 @@ class GenPath : public CMOOSApp
 
    void generatePath();
 
+   static bool pointComp(const std::string & p1, const std::string & p2);
+
  private: // Configuration variables
         bool m_points_loaded;
 
-        std::string m_vname;
         std::list<std::string> m_visiting_points;
 
         XYSegList m_seglist;
+
+        double m_nav_x;
+        double m_nav_y;
 
 
  private: // State variables

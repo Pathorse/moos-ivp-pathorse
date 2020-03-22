@@ -10,6 +10,7 @@
 #include "GenPath.h"
 #include "XYSegList.h"
 #include <cstdlib>
+#include <math.h>
 
 using namespace std;
 
@@ -20,7 +21,6 @@ GenPath::GenPath()
 {
   m_points_loaded = false;
 
-  m_vname = "unknown";
   m_visiting_points = {};
 }
 
@@ -59,9 +59,12 @@ bool GenPath::OnNewMail(MOOSMSG_LIST &NewMail)
 
     if (MOOSStrCmp(key, "VISIT_POINT"))
     {
-      m_visiting_points.push_back(sval);
-      if ( sval == "lastpoint" )
+      if ( sval == "firstpoint" )
+        m_points_loaded = false;
+      else if ( sval == "lastpoint" )
         m_points_loaded = true;
+      else
+        m_visiting_points.push_back(sval);
     }
 
     if ( m_points_loaded )
@@ -111,10 +114,6 @@ bool GenPath::OnStartUp()
       else if(param == "bar") {
         //handled
       }
-
-
-      if ( param == "vname" )
-        m_vname = value;
     }
   }
   
@@ -137,12 +136,14 @@ void GenPath::RegisterVariables()
 
 void GenPath::generatePath()
 {
+  m_visiting_points.sort(pointComp);
+ 
   list<string>::iterator point;
   for (point = m_visiting_points.begin(); point != m_visiting_points.end(); point ++)
   {
-      double x    = stof(tokStringParse(point, "x", ',', '='));
-      double y    = stof(tokStringParse(point, "y", ',', '='));
-      int    id   = stoi(tokStringParse(point, "id", ',', '='));
+      double x    = stof(tokStringParse(*point, "x", ',', '='));
+      double y    = stof(tokStringParse(*point, "y", ',', '='));
+      int    id   = stoi(tokStringParse(*point, "id", ',', '='));
 
       m_seglist.add_vertex(x, y);
 
@@ -150,4 +151,19 @@ void GenPath::generatePath()
       updates_str       += m_seglist.get_spec();
       Notify("TRANSIT_UPDATES", updates_str);
   }
+}
+
+
+
+bool GenPath::pointComp(const string & p1, const string & p2)
+{
+  double x1    = stof(tokStringParse(p1, "x", ',', '='));
+  double y1    = stof(tokStringParse(p1, "y", ',', '='));
+  double x2    = stof(tokStringParse(p2, "x", ',', '='));
+  double y2    = stof(tokStringParse(p2, "y", ',', '='));
+
+  double d1    = sqrt( pow( x1, 2 ) + pow( y1, 2 ) );
+  double d2    = sqrt( pow( x2, 2 ) + pow( y2, 2 ) );
+
+  return d1 < d2;
 }
