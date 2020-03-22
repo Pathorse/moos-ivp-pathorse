@@ -5,8 +5,8 @@
 /*    DATE:                                                 */
 /************************************************************/
 
-#include <iterator>
 #include "MBUtils.h"
+#include <iterator>
 #include "GenPath.h"
 #include "XYSegList.h"
 #include <cstdlib>
