@@ -28,7 +28,7 @@ double  slope(point a, point b);
 double  distance(point a, point b);
 point   midPoint(point a, point b);
 
-list<point> findShortestRoute(list<point>  points);
+list<point> findShortestRoute(list<point>  points, point origin);
 void        updateRoutes(list<point> & shortestRoute, list<point> & points, point p);
 point       getNextPoint(list<point> & points, point p);
 

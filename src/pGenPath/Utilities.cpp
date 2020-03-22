@@ -51,10 +51,10 @@ point getNextPoint(list<point> & points, point p)
     return t;
 }
 
-list<point> findShortestRoute(list<point> points)
+list<point> findShortestRoute(list<point> points, point origin)
 {
   list<point> shortestRoute;
-  point p = {0, 0};
+  point p = origin;
   updateRoutes(shortestRoute, points, p);
   while ( points.size() >= 1 )
   {

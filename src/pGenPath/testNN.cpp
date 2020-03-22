@@ -29,7 +29,7 @@ int main()
 
 
     list<point> sp;
-    sp = findShortestRoute(points);
+    sp = findShortestRoute(points, o);
 
     point p = getNextPoint(points, o);
     cout << "Closest point to the origin: " << "x=" << p.x << "y=" << p.y << endl;

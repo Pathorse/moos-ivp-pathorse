@@ -8,8 +8,10 @@
 #ifndef GenPath_HEADER
 #define GenPath_HEADER
 
+#include "Utilities.h"
 #include "MOOS/libMOOS/MOOSLib.h"
 #include "XYSegList.h"
+
 
 class GenPath : public CMOOSApp
 {
@@ -28,12 +30,14 @@ class GenPath : public CMOOSApp
 
    void generatePath();
 
-   static bool pointComp(const std::string & p1, const std::string & p2);
+
 
  private: // Configuration variables
-        bool m_points_loaded;
+        bool m_firstpoint_loaded;
+        bool m_lastpoint_loaded;
+        int  m_num_points;
 
-        std::list<std::string> m_visiting_points;
+        std::list<point> m_visiting_points;
 
         XYSegList m_seglist;
 

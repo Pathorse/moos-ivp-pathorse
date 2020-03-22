@@ -5,6 +5,7 @@
 /*    DATE:                                                 */
 /************************************************************/
 
+#include "Utilities.h"
 #include "MBUtils.h"
 #include <iterator>
 #include "GenPath.h"
@@ -19,9 +20,14 @@ using namespace std;
 
 GenPath::GenPath()
 {
-  m_points_loaded = false;
+  m_firstpoint_loaded = false;
+  m_lastpoint_loaded  = false;
+  m_num_points        = 0;
 
   m_visiting_points = {};
+
+  m_nav_x = 0;
+  m_nav_y = 0;
 }
 
 //---------------------------------------------------------
@@ -55,22 +61,33 @@ bool GenPath::OnNewMail(MOOSMSG_LIST &NewMail)
 
     string key  = msg.GetKey();
     string sval = msg.GetString();
+    double dval  = msg.GetDouble();
 
+
+    if (MOOSStrCmp(key, "NAV_X"))
+      m_nav_x = dval;
+
+    if (MOOSStrCmp(key, "NAV_Y"))
+      m_nav_y = dval;
 
     if (MOOSStrCmp(key, "VISIT_POINT"))
     {
       if ( sval == "firstpoint" )
-        m_points_loaded = false;
+        m_firstpoint_loaded = true;
       else if ( sval == "lastpoint" )
-        m_points_loaded = true;
+        m_lastpoint_loaded = true;
       else
-        m_visiting_points.push_back(sval);
+      {
+        double x    = stof(tokStringParse(sval, "x", ',', '='));
+        double y    = stof(tokStringParse(sval, "y", ',', '='));
+        int    id   = stoi(tokStringParse(sval, "id", ',', '='));
+
+        point p = {x, y};
+        m_visiting_points.push_back(p);
+        m_num_points += 1;
+      }
     }
 
-    if ( m_points_loaded )
-    {
-      generatePath();
-    }
   }
    return(true);
 }
@@ -90,6 +107,12 @@ bool GenPath::OnConnectToServer()
 
 bool GenPath::Iterate()
 {
+
+  if ( m_lastpoint_loaded )
+  {
+    generatePath();
+    m_lastpoint_loaded = false;
+  }
   return(true);
 }
 
@@ -129,41 +152,25 @@ void GenPath::RegisterVariables()
   // Register("FOOBAR", 0);
 
   Register("VISIT_POINT", 0);
+  Register("NAV_X", 0);
+  Register("NAV_Y", 0);
 }
-
-
 
 
 void GenPath::generatePath()
 {
-  m_visiting_points.sort(pointComp);
- 
-  list<string>::iterator point;
-  for (point = m_visiting_points.begin(); point != m_visiting_points.end(); point ++)
+  point curr_pos = {m_nav_x, m_nav_y};
+
+  list<point> shortestRoute;
+  shortestRoute = findShortestRoute(m_visiting_points, curr_pos);
+
+  list<point>::iterator p_it;
+  for (p_it = shortestRoute.begin(); p_it != shortestRoute.end(); p_it++)
   {
-      double x    = stof(tokStringParse(*point, "x", ',', '='));
-      double y    = stof(tokStringParse(*point, "y", ',', '='));
-      int    id   = stoi(tokStringParse(*point, "id", ',', '='));
+    m_seglist.add_vertex(p_it->x, p_it->y);
 
-      m_seglist.add_vertex(x, y);
-
-      string updates_str  = "points = ";
-      updates_str       += m_seglist.get_spec();
-      Notify("TRANSIT_UPDATES", updates_str);
+    string updates_str  = "points = ";
+    updates_str       += m_seglist.get_spec();
+    Notify("TRANSIT_UPDATES", updates_str);
   }
-}
-
-
-
-bool GenPath::pointComp(const string & p1, const string & p2)
-{
-  double x1    = stof(tokStringParse(p1, "x", ',', '='));
-  double y1    = stof(tokStringParse(p1, "y", ',', '='));
-  double x2    = stof(tokStringParse(p2, "x", ',', '='));
-  double y2    = stof(tokStringParse(p2, "y", ',', '='));
-
-  double d1    = sqrt( pow( x1, 2 ) + pow( y1, 2 ) );
-  double d2    = sqrt( pow( x2, 2 ) + pow( y2, 2 ) );
-
-  return d1 < d2;
 }
