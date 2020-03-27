@@ -60,16 +60,11 @@ bool PointAssign::OnNewMail(MOOSMSG_LIST &NewMail)
     string key  = msg.GetKey();
     string sval = msg.GetString();
 
-
-    Notify("TESTVAR1", "made it");
-
     if (MOOSStrCmp(key, "VISIT_POINT"))
     {
       m_visiting_points.push_back(sval);
       m_points_assigned = false;
-      Notify("TESTVAR2", "made it, num points added: " + to_string(m_visiting_points.size()));
     }
-    Notify("TESTVAR3", "made it, point: " + sval);
   }
   return(true);
 }
@@ -91,8 +86,6 @@ bool PointAssign::OnConnectToServer()
 
 bool PointAssign::Iterate()
 {
-  //Notify("UTS_PAUSE", "false");
-  Notify("TESTVAR4", "made it");
   if ( !m_points_assigned )
   {
     assignPoints();

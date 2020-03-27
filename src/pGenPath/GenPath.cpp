@@ -83,6 +83,7 @@ bool GenPath::OnNewMail(MOOSMSG_LIST &NewMail)
         int    id   = stoi(tokStringParse(sval, "id", ',', '='));
 
         point p = {x, y};
+
         m_visiting_points.push_back(p);
         m_num_points += 1;
       }
