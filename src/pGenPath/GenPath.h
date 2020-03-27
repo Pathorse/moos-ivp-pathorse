@@ -1,7 +1,7 @@
 /************************************************************/
-/*    NAME: Paal Arthur S. Thorseth                                              */
+/*    NAME: Paal Arthur S. Thorseth                         */
 /*    ORGN: MIT                                             */
-/*    FILE: GenPath.h                                          */
+/*    FILE: GenPath.h                                       */
 /*    DATE:                                                 */
 /************************************************************/
 

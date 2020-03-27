@@ -6,4 +6,5 @@ ProcessConfig = pPointAssign
    AppTick   = 4
    CommsTick = 4
 
+   assign_by_region = false // default
 }

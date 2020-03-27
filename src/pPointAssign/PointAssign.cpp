@@ -22,8 +22,8 @@ using namespace std;
 PointAssign::PointAssign()
 {
   m_points_assigned  = false;
-  m_assign_by_region = true;
-  m_vehicles         = {"HENRY", "GILDA"};
+  m_assign_by_region = false;
+  m_vehicles         = {};
 
   m_visiting_points  = {};
 }
@@ -117,8 +117,11 @@ bool PointAssign::OnStartUp()
         //handled
       }
 
-      //if(param == "vname")
-      //  m_vehicles.push_back(value);
+      if ( param == "assign_by_region" )
+        m_assign_by_region = MOOSStrCmp( value, "true" );
+
+      if(param == "cname")
+        m_vehicles.push_back(toupper(value));
 
     }
   }

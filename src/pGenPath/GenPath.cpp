@@ -1,7 +1,7 @@
 /************************************************************/
-/*    NAME: Paal Arthur S. Thorseth                                              */
+/*    NAME: Paal Arthur S. Thorseth                         */
 /*    ORGN: MIT                                             */
-/*    FILE: GenPath.cpp                                        */
+/*    FILE: GenPath.cpp                                     */
 /*    DATE:                                                 */
 /************************************************************/
 
@@ -163,7 +163,7 @@ void GenPath::generatePath()
   point curr_pos = {m_nav_x, m_nav_y};
 
   list<point> shortestRoute;
-  shortestRoute = findShortestRoute(m_visiting_points, curr_pos);
+  shortestRoute = findShortestRoute(m_visiting_points, curr_pos); // From Utilities.h
 
   list<point>::iterator p_it;
   for (p_it = shortestRoute.begin(); p_it != shortestRoute.end(); p_it++)

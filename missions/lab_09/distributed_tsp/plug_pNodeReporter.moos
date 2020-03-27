@@ -6,5 +6,9 @@ ProcessConfig = pNodeReporter
   AppTick     = 2
   CommsTick   = 2
   
-  VESSEL_TYPE = KAYAK
+  //VESSEL_TYPE = $(VTYPE)
+
+
+  platform_type  = $(VTYPE)
+  platform_color = $(COLOR)
 }

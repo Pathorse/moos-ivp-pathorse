@@ -28,6 +28,24 @@ Processconfig = ANTLER
 
 
 
+
+
+
+//------------------------------------------------
+// pPointAssign config block
+
+ProcessConfig = pPointAssign
+{
+   AppTick   = 4
+   CommsTick = 4
+
+   assign_by_region = true
+
+
+   cname = $(CNAME1)
+   cname = $(CNAME2)
+}
+
 //------------------------------------------
 // uTimerScript Configuration Block
 ProcessConfig = uTimerScript
