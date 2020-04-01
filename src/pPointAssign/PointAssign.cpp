@@ -75,6 +75,7 @@ bool PointAssign::OnNewMail(MOOSMSG_LIST &NewMail)
 bool PointAssign::OnConnectToServer()
 {
    RegisterVariables();
+   //sleep(1);
    //Notify("UTS_PAUSE", "false");
 
    return(true);

@@ -33,6 +33,12 @@ class GenPath : public CMOOSApp
 
 
  private: // Configuration variables
+
+        double m_visit_radius;
+
+
+ private: // State variables
+
         bool m_firstpoint_loaded;
         bool m_lastpoint_loaded;
         int  m_num_points;
@@ -43,9 +49,6 @@ class GenPath : public CMOOSApp
 
         double m_nav_x;
         double m_nav_y;
-
-
- private: // State variables
 };
 
 #endif 

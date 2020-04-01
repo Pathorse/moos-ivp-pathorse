@@ -20,6 +20,9 @@ using namespace std;
 
 GenPath::GenPath()
 {
+  m_visit_radius = 5;
+
+
   m_firstpoint_loaded = false;
   m_lastpoint_loaded  = false;
   m_num_points        = 0;
@@ -89,6 +92,9 @@ bool GenPath::OnNewMail(MOOSMSG_LIST &NewMail)
       }
     }
 
+    if (MOOSStrCmp(key, "GENPATH_REGENERATE"))
+      generatePath();
+
   }
    return(true);
 }
@@ -138,6 +144,9 @@ bool GenPath::OnStartUp()
       else if(param == "bar") {
         //handled
       }
+
+      if(param == "visit_radius")
+        m_visit_radius = stof(value);
     }
   }
   
@@ -155,6 +164,7 @@ void GenPath::RegisterVariables()
   Register("VISIT_POINT", 0);
   Register("NAV_X", 0);
   Register("NAV_Y", 0);
+  Register("GENPATH_REGENERATE");
 }
 
 
