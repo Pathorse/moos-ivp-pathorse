@@ -9,6 +9,7 @@
 #include "Utilities.h"
 #include <math.h>
 #include <list>
+#include <string>
 
 using namespace std;
 
@@ -34,6 +35,31 @@ void updateRoutes(list<point> & shortestRoute, list<point> & points, point p)
 {
     shortestRoute.push_back(p);
     points.remove(p);
+}
+
+point contains(list<point> l, point p, double epsilon)
+{
+  list<point>::iterator it;
+  for (it = l.begin(); it != l.end(); it++)
+  {
+    //if ( *it == p )
+    if ( distance(*it, p) <= epsilon )
+      return *it;
+  }
+
+  point a = {NULL, NULL};
+  return a;
+}
+
+string pointlistToString(list<point> l)
+{
+  string s = "";
+  list<point>::iterator it;
+  for (it = l.begin(); it != l.end(); it++)
+  {
+    s += "(" + to_string(it->x) + ", " + to_string(it->y) + ") - ";
+  }
+  return s;
 }
 
 

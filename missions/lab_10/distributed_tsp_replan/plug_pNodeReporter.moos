@@ -1,0 +1,14 @@
+//--------------------------------------------------------
+// pNodeReporter Configuration Block (Created from Plugin)
+
+ProcessConfig = pNodeReporter
+{
+  AppTick     = 2
+  CommsTick   = 2
+  
+  //VESSEL_TYPE = $(VTYPE)
+
+
+  platform_type  = $(VTYPE)
+  platform_color = $(COLOR)
+}
