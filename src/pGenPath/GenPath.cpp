@@ -194,6 +194,9 @@ bool GenPath::OnStartUp()
 
       if(param == "visit_radius")
         m_visit_radius = stof(value);
+
+      if(param == "epsilon")
+        m_epsilon = stof(value);
     }
   }
   

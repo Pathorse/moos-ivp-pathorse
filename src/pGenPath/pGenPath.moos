@@ -7,5 +7,6 @@ ProcessConfig = pGenPath
    CommsTick = 4
 
    visit_radius = 5 // default
+   epsilon      = 0.1 // default
 }
 
