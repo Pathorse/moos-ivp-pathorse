@@ -59,6 +59,8 @@ class GenPath : public AppCastingMOOSApp
 
         double m_wpt_x;
         double m_wpt_y;
+
+        string m_vname;
 };
 
 #endif 

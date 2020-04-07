@@ -9,8 +9,9 @@
 #define PointAssign_HEADER
 
 #include "MOOS/libMOOS/MOOSLib.h"
+#include "MOOS/libMOOS/Thirdparty/AppCasting/AppCastingMOOSApp.h"
 
-class PointAssign : public CMOOSApp
+class PointAssign : public AppCastingMOOSApp
 {
     public:
         PointAssign();
@@ -28,6 +29,9 @@ class PointAssign : public CMOOSApp
         void postViewPoint(double x, double y, std::string label, std::string color);
         void assignPoint(std::string point, std::string vehicle, bool all_vehicles=false);
         void assignPoints();
+
+
+        bool buildReport();
 
     private: // Configuration variables
         bool                        m_points_assigned;

@@ -36,14 +36,14 @@ SHORE_LISTEN="9300"
 
 nsplug meta_vehicle.moos targ_$VNAME1.moos -f WARP=$TIME_WARP \
     VNAME=$VNAME1      START_POS=$START_POS1                  \
-    VPORT="9001"       SHARE_LISTEN="9301"                    \
-    VTYPE="kayak"      SHORE_LISTEN=$SHORE_LISTEN             \
+    VPORT="9001"       PSHARE_PORT="9301"                    \
+    VTYPE="kayak"      SHORE="localhost:"$SHORE_LISTEN             \
     COLOR=$COLOR1
 
-nsplug meta_vehicle.moos targ_$VNAME2.moos -f WARP=$TIME_WARP \
+Nsplug meta_vehicle.moos targ_$VNAME2.moos -f WARP=$TIME_WARP \
     VNAME=$VNAME2      START_POS=$START_POS2                  \
-    VPORT="9002"       SHARE_LISTEN="9302"                    \
-    VTYPE="kayak"      SHORE_LISTEN=$SHORE_LISTEN             \
+    VPORT="9002"       PSHARE_PORT="9302"                    \
+    VTYPE="kayak"      SHORE="localhost:"$SHORE_LISTEN             \
     COLOR=$COLOR2
 
 nsplug meta_vehicle.bhv targ_$VNAME1.bhv -f VNAME=$VNAME1     \
@@ -53,7 +53,7 @@ nsplug meta_vehicle.bhv targ_$VNAME2.bhv -f VNAME=$VNAME2     \
     START_POS=$START_POS2 LOITER_POS=$LOITER_POS2 COLOR=$COLOR2
 
 nsplug meta_shoreside.moos targ_shoreside.moos -f WARP=$TIME_WARP \
-   VNAME="shoreside"  SHARE_LISTEN=$SHORE_LISTEN  VPORT="9000"    \
+   VNAME="shoreside"  PSHARE_PORT=$SHORE_LISTEN  MOOS_PORT="9000"    \
    CNAME1=$VNAME1     CNAME2=$VNAME2
         
 if [ ${JUST_MAKE} = "yes" ] ; then

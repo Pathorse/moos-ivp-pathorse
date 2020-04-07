@@ -39,6 +39,8 @@ GenPath::GenPath()
 
   m_wpt_x = 0;
   m_wpt_y = 0;
+
+  m_vname = "";
 }
 
 //---------------------------------------------------------
@@ -192,14 +194,20 @@ bool GenPath::OnStartUp()
         //handled
       }
 
-      if(param == "visit_radius")
-        m_visit_radius = stof(value);
+      if(MOOSStrCmp(param,"visit_radius"))
+          m_visit_radius = stof(value);
 
-      if(param == "epsilon")
-        m_epsilon = stof(value);
+      if(MOOSStrCmp(param,"epsilon"))
+          m_epsilon = stof(value);
+
+      if(MOOSStrCmp(param,"vname"))
+      {
+          m_vname = value;
+          Notify("CNAME", m_vname);
+      }
     }
   }
-  
+
   RegisterVariables();	
   return(true);
 }
@@ -223,24 +231,27 @@ void GenPath::RegisterVariables()
 
 bool GenPath::buildReport()
 {
-   m_msgs << "First point received: " << m_firstpoint_loaded << endl;
-   m_msgs << "Last point received: " << m_lastpoint_loaded << endl;
-   m_msgs << "Total Points received: " << m_num_points << endl;
-   m_msgs << "Visit Radius: " << m_visit_radius << endl;
+    m_msgs << "Vehicle name: " << m_vname << endl;
+    m_msgs << "------------------------------------------------------" << endl;
 
-   m_msgs << "\nTour Status" << endl;
-   m_msgs << "----------------------------------" << endl;
-   m_msgs << "Total Points Visited: " << m_num_points_visited << endl;
-   m_msgs << "Total Points Unvisited: " << m_num_points_unvisited << endl;
-   m_msgs << "Waypoint: (" << m_wpt_x << ", " << m_wpt_y << ")" << endl;
-   m_msgs << "Position: (" << m_nav_x << ", " << m_nav_y << ")" << endl;
-   m_msgs << "Heading: " << m_nav_heading << endl;
+    m_msgs << "First point received: " << m_firstpoint_loaded << endl;
+    m_msgs << "Last point received: " << m_lastpoint_loaded << endl;
+    m_msgs << "Total Points received: " << m_num_points << endl;
+    m_msgs << "Visit Radius: " << m_visit_radius << endl;
 
-   m_msgs << "\nPoint List" << endl;
-   m_msgs << "----------------------------------" << endl;
-   m_msgs << "Size: " << m_visiting_points.size() << endl;
+    m_msgs << "\nTour Status" << endl;
+    m_msgs << "----------------------------------" << endl;
+    m_msgs << "Total Points Visited: " << m_num_points_visited << endl;
+    m_msgs << "Total Points Unvisited: " << m_num_points_unvisited << endl;
+    m_msgs << "Waypoint: (" << m_wpt_x << ", " << m_wpt_y << ")" << endl;
+    m_msgs << "Position: (" << m_nav_x << ", " << m_nav_y << ")" << endl;
+    m_msgs << "Heading: " << m_nav_heading << endl;
 
-   return(true);
+    m_msgs << "\nPoint List" << endl;
+    m_msgs << "----------------------------------" << endl;
+    m_msgs << "Size: " << m_visiting_points.size() << endl;
+
+    return(true);
 }
 
 void GenPath::generatePath()

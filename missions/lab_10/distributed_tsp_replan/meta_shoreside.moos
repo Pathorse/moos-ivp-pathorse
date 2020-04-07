@@ -3,7 +3,7 @@
 
 ServerHost = localhost
 ServerPort = $(MOOS_PORT)
-Community  = shoreside
+Community  = $(VNAME)
 
 #include plug_origin_warp.moos
   
@@ -42,8 +42,8 @@ ProcessConfig = pPointAssign
    assign_by_region = true
 
 
-   cname = $(CNAME1)
-   cname = $(CNAME2)
+   //cname = $(CNAME1)
+   //cname = $(CNAME2)
 }
 
 //------------------------------------------
@@ -76,6 +76,8 @@ ProcessConfig = uFldShoreBroker
 
   BRIDGE   = src=RETURN_ALL, alias=RETURN
   BRIDGE   = src=RETURN_$V,  alias=RETURN
+
+//  QBRIDGE  = CNAME
 
   //BRIDGE   = src=VISIT_POINT_$V,  alias=VISIT_POINT
 }

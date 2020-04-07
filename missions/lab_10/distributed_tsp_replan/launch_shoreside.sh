@@ -52,7 +52,7 @@ done
 
 nsplug meta_shoreside.moos targ_shoreside.moos -f WARP=$TIME_WARP  \
        IP_ADDR=$IP_ADDR       PSHARE_PORT=$PSHARE_PORT             \
-       MOOS_PORT=$MOOS_PORT  
+       MOOS_PORT=$MOOS_PORT   VNAME="shoreside"                    \
 
 if [ ${JUST_MAKE} = "yes" ] ; then
     exit 0

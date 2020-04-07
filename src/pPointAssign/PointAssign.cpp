@@ -40,6 +40,8 @@ PointAssign::~PointAssign()
 
 bool PointAssign::OnNewMail(MOOSMSG_LIST &NewMail)
 {
+  AppCastingMOOSApp::OnNewMail(NewMail);
+
   MOOSMSG_LIST::iterator p;
 
   for(p=NewMail.begin(); p!=NewMail.end(); p++) {
@@ -65,6 +67,9 @@ bool PointAssign::OnNewMail(MOOSMSG_LIST &NewMail)
       m_visiting_points.push_back(sval);
       m_points_assigned = false;
     }
+
+    if(MOOSStrCmp(key, "CNAME"))
+      m_vehicles.push_back(toupper(sval));
   }
   return(true);
 }
@@ -87,12 +92,15 @@ bool PointAssign::OnConnectToServer()
 
 bool PointAssign::Iterate()
 {
-  if ( !m_points_assigned )
+  AppCastingMOOSApp::Iterate();
+
+  if ( !m_points_assigned && m_vehicles.size() > 0 )
   {
     assignPoints();
     m_points_assigned = true;
   }
 
+  AppCastingMOOSApp::PostReport();
   return(true);
 }
 
@@ -102,6 +110,8 @@ bool PointAssign::Iterate()
 
 bool PointAssign::OnStartUp()
 {
+  AppCastingMOOSApp::OnStartUp();
+ 
   list<string> sParams;
   m_MissionReader.EnableVerbatimQuoting(false);
   if(m_MissionReader.GetConfiguration(GetAppName(), sParams)) {
@@ -121,8 +131,8 @@ bool PointAssign::OnStartUp()
       if ( param == "assign_by_region" )
         m_assign_by_region = MOOSStrCmp( value, "true" );
 
-      if(param == "cname")
-        m_vehicles.push_back(toupper(value));
+      //if(param == "cname")
+      //  m_vehicles.push_back(toupper(value));
 
     }
   }
@@ -136,8 +146,22 @@ bool PointAssign::OnStartUp()
 
 void PointAssign::RegisterVariables()
 {
+  AppCastingMOOSApp::RegisterVariables();
+ 
   // Register("FOOBAR", 0);
   Register("VISIT_POINT", 0);
+  Register("CNAME", 0);
+}
+
+bool PointAssign::buildReport()
+{
+  m_msgs << "Vehicles connected: ";
+  list<string>::iterator it;
+  for(it = m_vehicles.begin(); it != m_vehicles.end(); ++it)
+    m_msgs << *it << ", ";
+  m_msgs << "\n";
+
+  return(true);
 }
 
 
@@ -156,10 +180,16 @@ void PointAssign::assignPoint(string point, string vehicle, bool all_vehicles)
     double y    = stof(tokStringParse(point, "y", ',', '='));
     string id   = tokStringParse(point, "id", ',', '=');
 
+    list<string>::iterator v = m_vehicles.begin();
+
+    string v1 = *v;
+    v++;
+    string v2 = *v;
+
     Notify("VISIT_POINT_" + vehicle, point);
-    if ( vehicle == "GILDA" )
+    if ( vehicle == v1 )
       postViewPoint(x, y, id, "yellow");
-    if ( vehicle == "HENRY" )
+    if ( vehicle == v2 )
       postViewPoint(x, y, id, "red");
   }
 }
@@ -191,10 +221,17 @@ void PointAssign::assignPoints()
         double x    = stof(tokStringParse(*point, "x", ',', '='));
         double y    = stof(tokStringParse(*point, "y", ',', '='));
         string id   = tokStringParse(*point, "id", ',', '=');
+
+        string v1 = *vehicle;
+        vehicle++;
+        string v2 = *vehicle;
+
+        vehicle = m_vehicles.begin();
+
         if ( x >= 87.5 )
-          assignPoint(*point, "HENRY");
+          assignPoint(*point, v1);
         else
-          assignPoint(*point, "GILDA");
+          assignPoint(*point, v2);
 
       }
       else
@@ -213,6 +250,7 @@ void PointAssign::assignPoints()
 
   }
 }
+
 
 void PointAssign::postViewPoint(double x, double y, string label, string color)
 {
