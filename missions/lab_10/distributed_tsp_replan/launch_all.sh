@@ -41,3 +41,6 @@ echo "Launching Shoreside...."
 ./launch_shoreside.sh $JUST_MAKE $TIME_WARP
 
 
+
+
+ktm;  sleep 2;  killall -9 pAntler;  zkill.sh MOOSDB -v # Killing the MOOS

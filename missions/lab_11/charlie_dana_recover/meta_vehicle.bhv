@@ -24,7 +24,7 @@ set MODE = RETURNING {
 set MODE = LOITERING {
   MODE = ACTIVE
   LOITER = true
-} 
+}
 
 
 //----------------------------------------------
