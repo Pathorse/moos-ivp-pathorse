@@ -6,7 +6,7 @@
 
 TIME_WARP=1
 JUST_MAKE="no"
-IP_ADDR=""
+IP_ADDR="localhost"
 PSHARE_PORT="9300"
 MOOS_PORT="9000"
 
