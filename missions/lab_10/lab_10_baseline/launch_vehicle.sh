@@ -7,7 +7,7 @@ JUST_MAKE="no"
 HOSTNAME=$(hostname -s)
 VNAME=$(id -un)
 
-IP_ADDR="localhost"
+IP_ADDR=""
 MOOS_PORT="9001"
 PSHARE_PORT="9201"
 SHORE="localhost:9300"
