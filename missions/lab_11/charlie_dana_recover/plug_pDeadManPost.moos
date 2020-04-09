@@ -1,0 +1,14 @@
+//---------------------------------------------------------
+// pDeadManPost Config Block  (Created from Plugin)
+
+ProcessConfig = pDeadManPost
+{
+  AppTick    = 2
+  CommsTick  = 2
+
+  heartbeat_var   = NODE_MESSAGE
+  max_noheart     = 500
+  post_policy     = reset
+  active_at_start = false
+  deadflag        = UP_LOITER=center_assign=$(LOITER_POS)
+}
