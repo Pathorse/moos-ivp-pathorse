@@ -10,6 +10,8 @@ By setting the concurrent parameter false we ensure that the annealer is run aft
 
 ## Parameter Sensitivity
 
+*Note Default angle is 270, not 0 as stated in the lab assignment*
+
 #### Simulation results:
 
 | Run | Error  | Score | Est. Wavelength | Wavelength |
@@ -22,7 +24,7 @@ By setting the concurrent parameter false we ensure that the annealer is run aft
 
 ## Dynamic Front
 
-### Simulation results:
+#### Simulation results:
 
 | Run | Error  | Score | Est. Wavelength | Wavelength | Est. Period | Period |
 | --- |:------:| -----:| ---------------:| ----------:| -----------:| ------:|
@@ -32,8 +34,23 @@ By setting the concurrent parameter false we ensure that the annealer is run aft
 | 4   | 0.021  | 4655  | 198.4           | 212.0      | 198.8       | 200.0  |
 | 5   | 0.482  | 207.4 | 500.0           | 212.0      | 100.5       | 200.0  |
 
-### Discussion
-By analyzing the simulation results we observe a drop in wavelength estimation performance, when comparing the two parameter (wavelength and period) estimation case to the single (wavelength) estimation case. This is expected as estimating a single parameter is an easier task, and by introducing more unknown parameters one also increases the estimation difficulty. 
+#### Discussion
+By analyzing the simulation results we observe a drop in wavelength estimation performance when comparing the two parameter (wavelength and period) estimation case to the single (wavelength) estimation case. This is expected as estimating a single parameter is an easier task, and by introducing more unknown parameters one also increases the estimation difficulty. The reason for the increased difficulty is the added complexity when solving the nonlinear optimization problem. By adding parameters the span of local minimums increase, and followingly the difficulty solving the problem.  
 
 ## Survey Pattern
- 
+
+#### Simulation results (two unknowns: wavelength, period):
+
+| Run | Error  | Score | Lawnmower Angle | Lane width |
+| --- |:------:| -----:| ---------------:| ----------:|
+| 1   | 0.082  | 1213  | 0               | 25         | 
+| 2   | 0.401  | 249.2 | 225             | 25         | 
+| 3   | 0.057  | 1755  | 270             | 25         | 
+| 4   | 0.028  | 3531  | 270             | 10         | 
+| 4   | 0.080  | 1285  | 270             | 45         | 
+
+#### Discussion
+By analyzing the simulation results we observe that the best performance is achieved for a lawnmower pattern with angle *270* and lane width *10*.
+
+
+## Multi-parameter Estimation
