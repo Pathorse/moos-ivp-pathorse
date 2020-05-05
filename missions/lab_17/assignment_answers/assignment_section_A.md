@@ -10,9 +10,30 @@ By setting the concurrent parameter false we ensure that the annealer is run aft
 
 ## Parameter Sensitivity
 
+#### Simulation results:
+
+| Run | Error  | Score | Est. Wavelength | Wavelength |
+| --- |:------:| -----:| ---------------:| ----------:|
+| 1   | 0.011  | 8798  | 219.2           | 212.0      | 
+| 2   | 0.009  | 10352 | 205.9           | 212.0      | 
+| 3   | 0.003  | 32798 | 210.0           | 212.0      | 
+| 4   | 0.019  | 5178  | 199.7           | 212.0      | 
+| 5   | 0.009  | 11732 | 206.6           | 212.0      | 
 
 ## Dynamic Front
 
+### Simulation results:
+
+| Run | Error  | Score | Est. Wavelength | Wavelength | Est. Period | Period |
+| --- |:------:| -----:| ---------------:| ----------:| -----------:| ------:|
+| 1   | 0.105  | 946.5 | 145.2           | 212.0      | 206.5       | 200.0  |
+| 2   | 0.049  | 2036  | 185.4           | 212.0      | 184.6       | 200.0  |
+| 3   | 0.035  | 2841  | 230.8           | 212.0      | 211.5       | 200.0  |
+| 4   | 0.021  | 4655  | 198.4           | 212.0      | 198.8       | 200.0  |
+| 5   | 0.482  | 207.4 | 500.0           | 212.0      | 100.5       | 200.0  |
+
+### Discussion
+By analyzing the simulation results we observe a drop in wavelength estimation performance, when comparing the two parameter (wavelength and period) estimation case to the single (wavelength) estimation case. This is expected as estimating a single parameter is an easier task, and by introducing more unknown parameters one also increases the estimation difficulty. 
 
 ## Survey Pattern
  
