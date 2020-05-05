@@ -22,6 +22,11 @@ By setting the concurrent parameter false we ensure that the annealer is run aft
 | 4   | 0.019  | 5178  | 199.7           | 212.0      | 
 | 5   | 0.009  | 11732 | 206.6           | 212.0      | 
 
+#### Plot
+Here's a plot of the score versus the estimated wavelength error:
+
+![Estimation error](parameter_sensitivity_plot.eps)
+
 ## Dynamic Front
 
 #### Simulation results:
