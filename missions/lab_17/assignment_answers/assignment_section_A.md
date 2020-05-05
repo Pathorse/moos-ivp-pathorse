@@ -10,7 +10,7 @@ By setting the concurrent parameter false we ensure that the annealer is run aft
 
 ## Parameter Sensitivity
 
-*Note Default angle is 270, not 0 as stated in the lab assignment*
+*Note Default Angle and Lane Width for the lawnmower pattern is 270 and 25, respectively*
 
 #### Simulation results:
 
@@ -47,10 +47,19 @@ By analyzing the simulation results we observe a drop in wavelength estimation p
 | 2   | 0.401  | 249.2 | 225             | 25         | 
 | 3   | 0.057  | 1755  | 270             | 25         | 
 | 4   | 0.028  | 3531  | 270             | 10         | 
-| 4   | 0.080  | 1285  | 270             | 45         | 
+| 5   | 0.080  | 1285  | 270             | 45         | 
 
 #### Discussion
-By analyzing the simulation results we observe that the best performance is achieved for a lawnmower pattern with angle *270* and lane width *10*.
+By analyzing the simulation results we observe that the best performance is achieved for a lawnmower pattern with angle *270* and lane width *10*. This is as expected as the ocean front is horizontal, and followingly by performing a horizontal lawnmower search one achieves good separation for estimating both wavelength and period. 
 
 
 ## Multi-parameter Estimation
+
+#### Simulation results (all unknowns, except alpha):
+
+
+| Run | Error  | Score | 
+| --- |:------:| -----:| 
+| 1   | 0.698  | 143.4 | 
+| 2   | 0.511  | 195.6 | 
+| 3   | 0.348  | 287.0 | 
