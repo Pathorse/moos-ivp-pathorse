@@ -28,11 +28,8 @@ Processconfig = ANTLER
   Run = pBasicContactMgr   @ NewConsole = false
 
   Run = pFrontEstimate     @ NewConsole = false
-
-  Run = pFrontEstimateComms @ NewConsole = false
 }
 
-#include plug_pFrontEstimateComms.moos
 #include plug_pFrontEstimate.moos
 #include plug_uTimerScript.moos  
 #include plug_uFldNodeBroker.moos

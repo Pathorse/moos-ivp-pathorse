@@ -23,6 +23,7 @@ ADD_SUBDIRECTORY(pPointAssign)
 ADD_SUBDIRECTORY(pGenPath)
 #ADD_SUBDIRECTORY(pFoobar)
 ADD_SUBDIRECTORY(pOdometry)
+ADD_SUBDIRECTORY(pFrontEstimateComms)
 
 ##############################################################################
 #                           END of CMakeLists.txt

@@ -64,13 +64,29 @@ TARGET_LINK_LIBRARIES(BHV_Pulse
    ${SYSTEM_LIBS} )
 
 
-
 #--------------------------------------------------------
 #                                              BHV_ZigLeg
 #--------------------------------------------------------
 ADD_LIBRARY(BHV_ZigLeg SHARED
    BHV_ZigLeg.cpp)
 TARGET_LINK_LIBRARIES(BHV_ZigLeg
+   helmivp
+   behaviors
+   ivpbuild
+   logic
+   ivpcore
+   bhvutil
+   mbutil
+   geometry
+   ${SYSTEM_LIBS} )
+
+
+#--------------------------------------------------------
+#                                     BHV_SearchAlongLine
+#--------------------------------------------------------
+ADD_LIBRARY(BHV_SearchAlongLine SHARED
+   BHV_SearchAlongLine.cpp)
+TARGET_LINK_LIBRARIES(BHV_SearchAlongLine
    helmivp
    behaviors
    ivpbuild

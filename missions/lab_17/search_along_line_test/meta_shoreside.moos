@@ -85,9 +85,9 @@ ProcessConfig = uFldShoreBroker
 
   bridge = src=RETURN_ALL, alias=RETURN
   bridge = src=RETURN_$V, alias=RETURN
-  bridge = src=UP_LOITER_$N,alias=UP_LOITER
-  bridge = src=UCTD_MSMNT_REPORT_$V,alias=UCTD_MSMNT_REPORT
-  bridge = src=APPCAST_REQ
+  bridge= src=UP_LOITER_$N,alias=UP_LOITER
+  bridge= src=UCTD_MSMNT_REPORT_$V,alias=UCTD_MSMNT_REPORT
+  bridge   = src=APPCAST_REQ 
 }
 
 //--------------------------------------------------
@@ -100,8 +100,8 @@ ProcessConfig = uFldNodeComms
 
 	comms_range      = 100
 	critical_range   = 25
-	min_msg_interval = 0
-	max_msg_length   = 0
+	min_msg_interval = 0 // Unlimited frequency
+	max_msg_length   = 0 // Unlimited length
 	groups           = true
 	view_node_rpt_pulses = true
 }
@@ -129,7 +129,6 @@ ProcessConfig = pMarineViewer
 	nodes_font_size      = xlarge
 
   SCOPE = UCTD_PARAMETER_ESTIMATE
-  SCOPE = NODE_MESSAGE
   //ACTION = STATION_ALL = true
 
   button_one   = DEPLOY_ALL  # DEPLOY_ALL=true 
