@@ -55,6 +55,9 @@ BHV_ZigZag::BHV_ZigZag(IvPDomain gdomain) :
   start_x = 0;
   start_y = 0;
 
+  // Added by Paal
+  m_new_heading_timestamp = 0;
+
   m_domain = subDomain(m_domain, "speed,course");
 
   m_current_compensator = false;
@@ -66,6 +69,7 @@ BHV_ZigZag::BHV_ZigZag(IvPDomain gdomain) :
   addInfoVars("NAV_Y");
   addInfoVars("CURRENT_X");
   addInfoVars("CURRENT_Y");
+  addInfoVars("OPREG_ABSOLUTE_PERIM_DIST");
 }
 
 //-----------------------------------------------------------
@@ -155,25 +159,40 @@ IvPFunction *BHV_ZigZag::onRunState()
 {
   double curr_ang,head_1,head_2;
  
-  bool   ok,ok1,ok2,ok3,ok4;
+  bool   ok,ok1,ok2,ok3,ok4,ok5,ok6;
   double curr_x = getBufferDoubleVal("NAV_X", ok);
   double curr_y = getBufferDoubleVal("NAV_Y", ok1);
 
   double tmp_x = getBufferDoubleVal("CURRENT_X", ok3);
   double tmp_y = getBufferDoubleVal("CURRENT_Y", ok4);
+
+  double opreg_dist = getBufferDoubleVal("OPREG_ABSOLUTE_PERIM_DIST", ok5);
+  double opreg_eta = getBufferDoubleVal("OPREG_TRAJECTORY_PERIM_ETA", ok6);
+
+  double curr_time = getBufferCurrTime();
+
+  double dtimestamp = curr_time - m_new_heading_timestamp;
+
+  if (opreg_dist <= 25 && dtimestamp <= 20)
+  //if (opreg_eta <= 10)
+  {
+    heading = angle360(heading + 180);
+    m_new_heading_timestamp = getBufferCurrTime();
+  }
+
   if (ok3 && ok4)
-    {
-      north_current_spd = tmp_y;
-      east_current_spd = tmp_x;
-    }
+  {
+    north_current_spd = tmp_y;
+    east_current_spd = tmp_x;
+  }
   
   if(first_iteration) 
-    {
-      first_iteration = false;
-      distance_traveled = 0;
-      start_x = curr_x;
-      start_y = curr_y; 
-    }  
+  {
+    first_iteration = false;
+    distance_traveled = 0;
+    start_x = curr_x;
+    start_y = curr_y;
+  }
   else
     {
       // Projected distance in desired heading direction

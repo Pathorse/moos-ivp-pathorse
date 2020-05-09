@@ -49,6 +49,9 @@ private: // Behavior Parameters
   double       north_current_spd;
   bool         m_current_compensator;
   bool        first_iteration;
+
+    // Added by Paal
+    double m_new_heading_timestamp;
 };
 
 extern "C" {

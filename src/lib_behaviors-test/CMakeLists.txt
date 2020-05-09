@@ -82,6 +82,23 @@ TARGET_LINK_LIBRARIES(BHV_ZigLeg
 
 
 #--------------------------------------------------------
+#                                              BHV_ZigZag
+#--------------------------------------------------------
+ADD_LIBRARY(BHV_ZigZag SHARED
+  BHV_ZigZag.cpp)
+TARGET_LINK_LIBRARIES(BHV_ZigZag
+   helmivp
+   behaviors
+   ivpbuild
+   logic
+   ivpcore
+   bhvutil
+   mbutil
+   geometry
+   ${SYSTEM_LIBS} )
+
+
+#--------------------------------------------------------
 #                                     BHV_SearchAlongLine
 #--------------------------------------------------------
 ADD_LIBRARY(BHV_SearchAlongLine SHARED

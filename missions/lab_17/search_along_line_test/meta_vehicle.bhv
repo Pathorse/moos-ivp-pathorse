@@ -8,10 +8,13 @@ initialize   STATION_KEEP = false
 initialize   SURVEY  = false //true
 initialize   AVOID   = true
 initialize   SURVEY_UNDERWAY = false
-//initialize   OPREGION = true
-initialize   OPREGION = false
-initialize   SEARCH_ALONG_LINE = true
+initialize   OPREGION = true
+initialize   OPREGION = true
+initialize   SEARCH_ALONG_LINE = false
 //initialize   ON_STATION = true
+initialize   ZIGZAG = false
+initialize   INIT = false
+initialize   LOITER = true
 
 set MODE = ACTIVE {
   DEPLOY = true
@@ -20,6 +23,16 @@ set MODE = ACTIVE {
 set MODE = RETURNING {
   MODE = ACTIVE
   RETURN = true
+}
+
+set MODE = INITIALIZING {
+  MODE = ACTIVE
+  INIT = true
+}
+
+set MODE = LOITERING {
+  MODE = ACTIVE
+  LOITER = true
 }
 
 set MODE = SURVEYING {
@@ -34,6 +47,41 @@ set MODE = SEARCHING_ALONG_LINE {
   RETURN = false
 }
 
+set MODE = ZIGZAGGING {
+  MODE = ACTIVE
+  ZIGZAG = true
+  RETURN = false
+}
+
+//----------------------------------------------
+Behavior = BHV_Waypoint
+{
+  name       = waypt_init
+  pwt        = 100
+  condition  = MODE == INITIALIZING
+  endflag    = INIT   = false
+  endflag    = ZIGZAG = true
+
+         speed = 2.0
+        radius = 2.0
+     point     = 50,-100
+        repeat = 0
+          lead = 8
+}
+//----------------------------------------------
+Behavior = BHV_ZigZag
+{
+  name = zigzag_survey
+  condition = MODE == ZIGZAGGING
+
+  speed = 1.5
+  updates = PROSECUTE_HEADING
+  period = 50
+  amplitude = 150
+  heading = 90
+  zigzag_function = linear
+  duration = no-time-limit
+}
 //----------------------------------------------
 Behavior = BHV_RubberBand
 {
@@ -47,6 +95,8 @@ Behavior = BHV_RubberBand
   outer_speed = 2.2
   extra_speed = 2.2
 }
+
+
 //----------------------------------------------
 Behavior = BHV_SearchAlongLine
 {
@@ -57,10 +107,52 @@ Behavior = BHV_SearchAlongLine
 
   speed       = 2    // Default
   offset_dist = 0    // Default
-  px          = 0    // Default
-  py          = -100    // Default
+  px          = 100    // Default
+  py          = 0    // Default
   alpha       = 45   // Default
-  kp          = 100    // Default
+  kp          = 1    // Default
+}
+
+
+//----------------------------------------------
+Behavior = BHV_Loiter
+{
+  // General Behavior Parameters
+  // ---------------------------
+  name         = transit               // example
+  pwt          = 100                   // default
+  condition    = MODE==LOITERING       // example
+  duration     = 150
+  updates      = LOITER_UPDATES        // example
+  endflag      = LOITER=false
+  endflag      = INIT=true
+
+  // Parameters specific to this behavior
+  // ------------------------------------
+       acquire_dist = 10               // default
+     capture_radius = 3                // default
+    center_activate = false            // default
+          clockwise = best             // default
+        slip_radius = 15               // default
+              speed = 3                // default
+      spiral_factor = -2               // default
+
+            polygon = radial:: x=5,y=8,radius=80,pts=8  // example
+       // post_suffix = HENRY                             // example
+
+      center_assign = 50,-100            // example
+     //xcenter_assign = 40               // example
+     //ycenter_assign = 50               // example
+
+
+       visual_hints = vertex_size  = 1             // default
+       visual_hints = edge_size    = 1             // default
+       visual_hints = vertex_color = dodger_blue   // default
+       visual_hints = edge_color   = white         // default
+       visual_hints = nextpt_color = yellow        // default
+       visual_hints = nextpt_lcolor = aqua         // default
+       visual_hints = nextpt_vertex_size = 5       // default
+       visual_hints = label        = zone3         // example
 }
 
 //----------------------------------------------

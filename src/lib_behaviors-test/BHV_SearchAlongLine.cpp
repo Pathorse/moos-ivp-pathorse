@@ -87,7 +87,7 @@ bool BHV_SearchAlongLine::setParam(string param, string val)
     return(true);
   }
   else if((param == "alpha") && isNumber(val)) {
-    m_alpha = double_val;
+    m_alpha = angle180(double_val);
     return(true);
   }
   else if((param == "kp") && isNumber(val)) {
@@ -172,12 +172,33 @@ IvPFunction* BHV_SearchAlongLine::onRunState()
   m_nav_y       = getBufferDoubleVal("NAV_Y", ok2);
   m_nav_heading = getBufferDoubleVal("NAV_HEADING", ok3);
 
+  // Intermediate values
+  double dx  = m_nav_x - m_px;
+  double dy  = m_nav_y - m_py;
+  double path_tan_angle = m_alpha;
+  double dir = degToRadians(path_tan_angle);
+
   // Calculate the cross track error
-  //if (ok1 && ok2)
-  m_cross_track_error = -(m_nav_x - m_px)*sin(degToRadians(m_alpha)) + (m_nav_y - m_py)*cos(degToRadians(m_alpha));
+  m_cross_track_error = - dx * sin(dir) + dy * cos(dir);
+
+  // Find cross track error sign
+  double kp = 0;
+
+  // Intermediate values
+  double vel_path_rel_ang = radToDegrees( atan( - m_kp * m_cross_track_error ) );
 
   // Find desired course
-  m_desired_heading = m_alpha + radToDegrees(atan(- m_kp * (m_cross_track_error - m_offset_dist) ));
+  m_desired_heading = angle360(path_tan_angle + vel_path_rel_ang);
+
+  // Post information
+  postMessage("LOS_dx=", dx);
+  postMessage("LOS_dy=", dy);
+  postMessage("LOS_path_tan_angle=", path_tan_angle);
+  postMessage("LOS_path_tan_angle_rad=", dir);
+  postMessage("LOS_cross_track_error=", m_cross_track_error);
+  postMessage("LOS_vel_path_rel_ang=", vel_path_rel_ang);
+  postMessage("LOS_desired_heading=", m_desired_heading);
+
 
   // Build ivp function
   ipf = buildFunctionWithZAIC();
@@ -214,8 +235,8 @@ IvPFunction *BHV_SearchAlongLine::buildFunctionWithZAIC()
 
   // Step 3 - Configure the ZAIC_PEAK parameters
   //double rel_ang_to_wpt = m_nav_heading;
-  //crs_zaic.setSummit(m_desired_heading);
-  crs_zaic.setSummit(m_alpha);
+  crs_zaic.setSummit(m_desired_heading);
+  //crs_zaic.setSummit(m_alpha);
   crs_zaic.setPeakWidth(0);
   crs_zaic.setBaseWidth(180.0);
   crs_zaic.setSummitDelta(0);
