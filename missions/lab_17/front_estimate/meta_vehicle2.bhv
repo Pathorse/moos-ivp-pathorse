@@ -142,12 +142,13 @@ Behavior = BHV_Waypoint
   inactiveflag = SURVEY_UNDERWAY = false
   endflag      = RETURN = true
 
-         speed = 2   // meters per second
+         speed = 3   // meters per second
         radius = 5.0
    slip_radius = 15.0
           lead = 8
 	  lead_damper=1
 	points = format=lawnmower, label=archie_survey, x=$(SURVEY_X), y=$(SURVEY_Y), width=$(WIDTH), height=$(HEIGHT),lane_width=$(LANE_WIDTH), rows=north-south, degs=$(DEGREES)
+  //points = format=lawnmower, label=survey, x=$(SURVEY_X), y=$(SURVEY_Y), width=30, height=140,lane_width=10, rows=north-south, degs=290
 
         repeat = 0
   visual_hints = nextpt_color=red, nextpt_lcolor=green

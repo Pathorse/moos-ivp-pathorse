@@ -20,8 +20,8 @@ ProcessConfig = pFrontEstimate
   min_wavelength = 100
   max_wavelength = 500
 
-  min_alpha = 500
-  max_alpha = 500
+  min_alpha = 350
+  max_alpha = 350
 
   min_beta = 10
   max_beta = 30

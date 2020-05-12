@@ -5,7 +5,7 @@
 TIME_WARP=1
 JUST_MAKE="no"
 VNAME="PAAL"
-COOL_FAC=15
+COOL_FAC=50
 COOL_STEPS=1000
 CONCURRENT="true"
 ADAPTIVE="false"
@@ -18,13 +18,14 @@ WIDTH1=120
 LANE_WIDTH1=25
 DEGREES1=270
 
-IP_ADDR="localhost"
-#IP_ADDR="213.128.163.41"
+#IP_ADDR="localhost"
+IP_ADDR="213.128.163.41"
 PSHARE_PORT="9301"
-SHORE="localhost:9300"
-#SHORE="213.128.163.41:9300"
+#SHORE="localhost:9300"
+##SHORE="213.128.163.41:9300"
+SHORE="66.31.44.231:9302"
 
-#-------------------------------------------------------
+##-------------------------------------------------------
 #  Part 2: Check for and handle command-line arguments
 #-------------------------------------------------------
 for ARGI; do

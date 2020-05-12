@@ -1,4 +1,4 @@
-ProcessConfig = pFrontEstimate
+ProcessConfig = pFrontEstimateComms
 {
   AppTick    = 4
   CommsTick  = 4

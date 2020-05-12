@@ -83,7 +83,7 @@ Behavior = BHV_Waypoint
          speed = 4.0
         radius = 2.0
      points    = -50,-100:100,-100
-        repeat = 3
+        repeat = 2
           lead = 8
 }
 
@@ -95,7 +95,7 @@ Behavior = BHV_Loiter
   name         = transit               // example
   pwt          = 100                   // default
   condition    = MODE==LOITERING       // example
-  duration     = 150
+  duration     = 100
   updates      = LOITER_UPDATES        // example
   activeflag   = SURVEY_UNDERWAY = true
   endflag      = LOITER=false
@@ -147,8 +147,8 @@ Behavior = BHV_Waypoint
    slip_radius = 15.0
           lead = 8
 	  lead_damper=1
-	points = format=lawnmower, label=survey, x=$(SURVEY_X), y=$(SURVEY_Y), width=$(WIDTH), height=$(HEIGHT),lane_width=$(LANE_WIDTH), rows=north-south, degs=$(DEGREES)
-
+	//points = format=lawnmower, label=survey, x=$(SURVEY_X), y=$(SURVEY_Y), width=$(WIDTH), height=$(HEIGHT),lane_width=$(LANE_WIDTH), rows=north-south, degs=$(DEGREES)
+  points = format=lawnmower, label=survey, x=$(SURVEY_X), y=$(SURVEY_Y), width=30, height=140,lane_width=10, rows=north-south, degs=290
         repeat = 0
   visual_hints = nextpt_color=red, nextpt_lcolor=green
   visual_hints = vertex_color=yellow, edge_color=gray25
