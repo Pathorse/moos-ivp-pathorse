@@ -7,6 +7,10 @@ JUST_MAKE="no"
 HAZARD_FILE="hazards.txt"
 
 IP_ADDR="localhost"
+#IP_ADDR="213.128.163.41"
+PSHARE_PORT="9300"
+SHORE="localhost:9300"
+#SHORE="6213.128.163.41:9300"
 
 #-------------------------------------------------------
 #  Part 2: Check for and handle command-line arguments
@@ -31,8 +35,8 @@ done
 #  Part 3: Create the .moos file(s)
 #-------------------------------------------------------
 nsplug meta_shoreside.moos targ_shoreside.moos -f WARP=$TIME_WARP \
-    VNAME="shoreside" SHARE_LISTEN=$SHORE_LISTEN \
-    IP_ADDR=$IP_ADDR
+       VNAME="shoreside" SHARE_LISTEN=$SHORE_LISTEN               \
+       IP_ADDR=$IP_ADDR  PSHARE_PORT=$PSHARE_PORT
 
 if [ ${JUST_MAKE} = "yes" ]; then
     exit 0

@@ -63,7 +63,8 @@ ProcessConfig = pShare
   AppTick    = 2
   CommsTick  = 2
 
-  input = route = localhost:9300 //& multicast_12
+  //input = route = localhost:9300 //& multicast_12
+  input = route = $(IP_ADDR):$(PSHARE_PORT)
 }
 
 
