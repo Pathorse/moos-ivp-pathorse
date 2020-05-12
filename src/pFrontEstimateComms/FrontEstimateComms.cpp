@@ -19,7 +19,7 @@ using namespace std;
 
 FrontEstimateComms::FrontEstimateComms()
 {
-  m_vname = "archie";
+  m_vname = "";
 }
 
 //---------------------------------------------------------
@@ -60,7 +60,7 @@ bool FrontEstimateComms::OnNewMail(MOOSMSG_LIST &NewMail)
       NodeMessage node_message;
 
       // Add information
-      node_message.setSourceNode("archie");
+      node_message.setSourceNode(m_vname);
       node_message.setDestNode("all");
       node_message.setVarName("UCTD_MSMNT_REPORT");
       node_message.setStringVal(sval);
@@ -136,7 +136,7 @@ bool FrontEstimateComms::OnStartUp()
       
       if(param == "vname") {
         //handled
-        //m_vname = value;
+        m_vname = value;
       }
       else if(param == "bar") {
         //handled
