@@ -9,8 +9,8 @@ HAZARD_FILE="hazards.txt"
 IP_ADDR="localhost"
 #IP_ADDR="213.128.163.41"
 PSHARE_PORT="9300"
-SHORE="localhost:9300"
-#SHORE="6213.128.163.41:9300"
+#SHORE="localhost:9300"
+#SHORE="213.128.163.41:9300"
 
 #-------------------------------------------------------
 #  Part 2: Check for and handle command-line arguments
