@@ -32,6 +32,7 @@
 #include "AngleUtils.h"
 #include "ZAIC_PEAK.h"
 #include "OF_Coupler.h"
+#include "XYPoint.h"
 
 using namespace std;
 
@@ -55,8 +56,15 @@ BHV_ZigZag::BHV_ZigZag(IvPDomain gdomain) :
   start_x = 0;
   start_y = 0;
 
-  // Added by Paal
+  // Added by Paal -----------------
   m_new_heading_timestamp = 0;
+  m_wpt_index = 0;
+  m_wpt_capture_angle = 0;
+  m_curr_time = getBufferCurrTime();
+  m_wpt_timestamp = 0;
+  m_new_wpt = false;
+
+  // -------------------------------
 
   m_domain = subDomain(m_domain, "speed,course");
 
@@ -70,6 +78,8 @@ BHV_ZigZag::BHV_ZigZag(IvPDomain gdomain) :
   addInfoVars("CURRENT_X");
   addInfoVars("CURRENT_Y");
   addInfoVars("OPREG_ABSOLUTE_PERIM_DIST");
+  addInfoVars("WPT_INDEX", "no_warning");
+  addInfoVars("VIEW_POINT", "no_warning");
 }
 
 //-----------------------------------------------------------
@@ -117,14 +127,14 @@ bool BHV_ZigZag::setParam(string g_param, string g_val)
 	
       return(true);
     } 
-   else if(g_param == "heading") 
-     {
-       double dval = atof(g_val.c_str());
-       if((dval < 0) || (!isNumber(g_val)))
-	 return(false);
-       heading = dval;
-       return(true);
-     }
+  // else if(g_param == "heading")
+  //   {
+  //     double dval = atof(g_val.c_str());
+  //     if((dval < 0) || (!isNumber(g_val)))
+	// return(false);
+  //     heading = dval;
+  //     return(true);
+  //   }
   else if(g_param == "amplitude") 
     {
       double dval = atof(g_val.c_str());
@@ -166,19 +176,54 @@ IvPFunction *BHV_ZigZag::onRunState()
   double tmp_x = getBufferDoubleVal("CURRENT_X", ok3);
   double tmp_y = getBufferDoubleVal("CURRENT_Y", ok4);
 
-  double opreg_dist = getBufferDoubleVal("OPREG_ABSOLUTE_PERIM_DIST", ok5);
-  double opreg_eta = getBufferDoubleVal("OPREG_TRAJECTORY_PERIM_ETA", ok6);
 
-  double curr_time = getBufferCurrTime();
+  // STUFF ADDED BY PAAL ------------------------------------------------
+  // --------------------------------------------------------------------
 
-  double dtimestamp = curr_time - m_new_heading_timestamp;
+ // double opreg_dist = getBufferDoubleVal("OPREG_ABSOLUTE_PERIM_DIST", ok5);
+ // double opreg_eta = getBufferDoubleVal("OPREG_TRAJECTORY_PERIM_ETA", ok6);
 
-  if (opreg_dist <= 25 && dtimestamp <= 20)
-  //if (opreg_eta <= 10)
+ // double curr_time = getBufferCurrTime();
+
+ // double dtimestamp = curr_time - m_new_heading_timestamp;
+
+ // //if (opreg_dist <= 25 && dtimestamp <= 20)
+ // //if (opreg_eta <= 10)
+ // postMessage("Current_time", curr_time );
+ // postMessage("Current_time_int", int(curr_time) );
+
+ // if (int(curr_time) % 150 == 0)
+ // {
+ //   double reversed_heading = angle360(heading + 180);
+ //   postMessage("Resetting heading, prev_head=", heading);
+ //   heading = reversed_heading;
+ //   postMessage("Resetting heading, new_head=", heading);
+ //   m_new_heading_timestamp = getBufferCurrTime();
+ // }
+
+  m_curr_time = getBufferCurrTime();
+
+  double next_wpt_index = getBufferDoubleVal("WPT_INDEX", ok5);
+  string next_wpt       = getBufferStringVal("VIEW_POINT", ok6);
+
+  if (ok6)
   {
-    heading = angle360(heading + 180);
-    m_new_heading_timestamp = getBufferCurrTime();
+    m_next_wpt.set_vx(stof(tokStringParse(next_wpt, "x", ',', '=')));
+    m_next_wpt.set_vy(stof(tokStringParse(next_wpt, "y", ',', '=')));
   }
+
+  if (next_wpt_index != m_wpt_index)
+  {
+    m_wpt_timestamp = m_curr_time;
+    m_wpt_capture_angle = relAng(curr_x, curr_y, m_next_wpt.x(), m_next_wpt.y());
+    m_new_wpt = true;
+    heading = m_wpt_capture_angle;
+  }
+
+  m_wpt_index = next_wpt_index;
+
+  // --------------------------------------------------------------------
+
 
   if (ok3 && ok4)
   {

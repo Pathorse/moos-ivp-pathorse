@@ -5,16 +5,13 @@
 initialize   DEPLOY  = false
 initialize   RETURN  = false
 initialize   STATION_KEEP = false
-initialize   SURVEY  = false //true
+initialize   SURVEY  = true
 initialize   AVOID   = true
-initialize   OPREGION = true
 initialize   OPREGION = true
 initialize   SEARCH_ALONG_LINE = false
 //initialize   ON_STATION = true
-initialize   ZIGZAG = false
 initialize   ZIGLEG = false
-initialize   INIT = false
-initialize   LOITER = true
+initialize   LOITER = false
 initialize   ALTERNATE = false
 initialize   SURVEY_UNDERWAY = false
 
@@ -51,18 +48,6 @@ set MODE = SURVEYING {
   RETURN = false
 }
 
-set MODE = SEARCHING_ALONG_LINE {
-  MODE = ACTIVE
-  SEARCH_ALONG_LINE = true
-  RETURN = false
-}
-
-set MODE = ZIGZAGGING {
-  MODE = ACTIVE
-  ZIGZAG = true
-  RETURN = false
-}
-
 set MODE = ZIGLEGGING {
   MODE = ACTIVE
   ZIGLEG = true
@@ -84,77 +69,11 @@ Behavior = BHV_ZigLeg2
 //----------------------------------------------
 Behavior = BHV_Waypoint
 {
-  name       = waypt_init
-  pwt        = 100
-  condition  = MODE == INITIALIZING
-  endflag    = INIT   = false
-  endflag    = ZIGZAG = true
-
-         speed = 2.0
-        radius = 2.0
-     point     = 50,-100
-        repeat = 0
-          lead = 8
-}
-//----------------------------------------------
-Behavior = BHV_ZigZag
-{
-  name = zigzag_survey
-  pwt  = 70
-  //condition = MODE == ZIGZAGGING
-  condition = MODE == ALTERNATING
-  condition = ZIGZAG = true
-  speed = 1.5
-  updates = PROSECUTE_HEADING
-  period = 50
-  amplitude = 150
-  //heading = 90
-  zigzag_function = linear
-  duration = no-time-limit
-}
-//----------------------------------------------
-Behavior = BHV_RubberBand
-{
-  name = bhv_rubber_band
-  pwt       = 100
-  condition = ON_STATION = true
-  condition = RETURN = false
-  point        = 100,-100
-  inner_radius = 3
-  outer_radius = 15
-  outer_speed = 2.2
-  extra_speed = 2.2
-}
-
-
-//----------------------------------------------
-Behavior = BHV_SearchAlongLine
-{
-  name         = line_survey
-  pwt          = 100
-  condition    = MODE==SEARCHING_ALONG_LINE
-  perpetual    = true
-
-  speed       = 2    // Default
-  offset_dist = 0    // Default
-  px          = 100    // Default
-  py          = 0    // Default
-  alpha       = 45   // Default
-  kp          = 1    // Default
-}
-
-
-//----------------------------------------------
-Behavior = BHV_Waypoint
-{
   name       = alternate
   pwt        = 100
   condition  = MODE == ALTERNATING
   updates    = UPDATE_ALTERNATE
-  //cycleflag  = SURVEY_UNDERWAY = true
-  //inactiveflag = SURVEY_UNDERWAY = false
   cycleflag  = ZIGLEG = true
-  //cycleflag  = ZIGZAG = true
   wptflag    = REQUEST_ESTIMATE = true
   endflag    = ALTERNATE  = false
   endflag    = RETURN     = true
@@ -220,7 +139,7 @@ Behavior = BHV_Waypoint
   perpetual    = true
   updates      = SURVEY_UPDATES
   activeflag   = SURVEY_UNDERWAY = true
-  //inactiveflag = SURVEY_UNDERWAY = false
+  inactiveflag = SURVEY_UNDERWAY = false
   endflag      = RETURN = true
 
          speed = 2   // meters per second

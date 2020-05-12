@@ -7,6 +7,7 @@
 
 #include <iterator>
 #include "MBUtils.h"
+#include "AngleUtils.h"
 #include "FrontEstimateComms.h"
 #include "NodeMessage.h"
 #include "NodeMessageUtils.h"
@@ -69,6 +70,33 @@ bool FrontEstimateComms::OnNewMail(MOOSMSG_LIST &NewMail)
       // Publish
       Notify("NODE_MESSAGE_LOCAL", message);
     }
+    if (MOOSStrCmp(key, "UCTD_REQUESTED_ESTIMATE"))
+    {
+      // Extract values
+      double x0    = 0;
+      double y0    = stof(tokStringParse(sval, "offset", ',', '='));
+      double angle = stof(tokStringParse(sval, "angle", ',', '='));
+      double theta = degToRadians(angle);
+
+      // Set dist to wpts along line
+
+      double L1 = -50;
+      double L2 = 150;
+
+      // create waypoints along the line
+      double wpt1_x = x0 + L1 * cos(theta);
+      double wpt1_y = y0 + L1 * sin(theta);
+
+      double wpt2_x = x0 + L2 * cos(theta);
+      double wpt2_y = y0 + L2 * sin(theta);
+
+      // Update alternating behavior
+      string msg = "points=";
+      msg += doubleToString(wpt1_x) + "," + doubleToString(wpt1_y);
+      msg += ":" + doubleToString(wpt2_x) + "," + doubleToString(wpt2_y);
+
+      Notify("UPDATE_ALTERNATE", msg);
+    }
   }
   return(true);
 }
@@ -127,5 +155,6 @@ void FrontEstimateComms::RegisterVariables()
 {
   // Register("FOOBAR", 0);
   Register("UCTD_MSMNT_REPORT", 0);
+  Register("UCTD_REQUESTED_ESTIMATE", 0);
 }
 

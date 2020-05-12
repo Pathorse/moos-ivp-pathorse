@@ -13,6 +13,7 @@ ADD_EXECUTABLE(pFrontEstimateComms ${SRC})
 
 TARGET_LINK_LIBRARIES(pFrontEstimateComms
    ${MOOS_LIBRARIES}
+   geometry
    mbutil
    ufield
    m

@@ -25,6 +25,7 @@
 
 #include <string>
 #include "IvPBehavior.h"
+#include "XYPoint.h"
 
 class IvPDomain;
 class BHV_ZigZag : public IvPBehavior {
@@ -52,6 +53,15 @@ private: // Behavior Parameters
 
     // Added by Paal
     double m_new_heading_timestamp;
+
+    double  m_wpt_index;
+    double  m_wpt_capture_angle;
+    XYPoint m_next_wpt;
+
+    double m_curr_time;
+    double m_wpt_timestamp;
+
+    bool m_new_wpt;
 };
 
 extern "C" {
